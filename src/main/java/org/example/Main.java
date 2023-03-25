@@ -1,6 +1,7 @@
 package org.example;
 
 import org.pcap4j.core.*;
+import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.Packet;
 import java.util.List;
 import java.util.Scanner;
@@ -20,20 +21,25 @@ public class Main {
         PacketListener listener = new PacketListener() {
             @Override
             public void gotPacket(Packet packet) {
+                System.out.println(packet.toString());
+                EthPacket ep = new EthPacket(packet.getRawData());
 
-                byte[] bytes = packet.getRawData();
 
+                /*byte[] bytes = packet.getRawData();
                 StringBuilder binary = new StringBuilder();
                 for (byte b : bytes) {
                     binary.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
                     binary.append(" ");
                 }
                 System.out.println(binary.toString() +"\n");
+                */
+
             }
         };
 
         //Keeps the interface open and then uses the listener object to handle the packet
         handle.loop(0,listener);
+
     }
 
     /*

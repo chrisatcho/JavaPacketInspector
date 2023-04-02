@@ -20,13 +20,13 @@ public class Main {
         // A handle is an abstraction of a pointer, referring to the interface.
         try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.NONPROMISCUOUS , readTimeout)) {
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
-            PacketListener listener = new PacketListener() {
-                @Override
-                public void gotPacket(Packet packet) {
-                    EthPacket ep = new EthPacket(packet.getRawData());
-                    System.out.println(ep.tostring());
-                }
+
+            // Wild lambda function
+            PacketListener listener = packet -> {
+                EthPacket ep = new EthPacket(packet.getRawData());
+                System.out.println(ep.tostring());
             };
+
             handle.loop(0,listener);
         } catch (Exception e) {
             e.printStackTrace();

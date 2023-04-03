@@ -8,10 +8,10 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws PcapNativeException, NotOpenException, InterruptedException {
-        String chosenInterface = getInterface();//Using user input choose an interface
-        PcapNetworkInterface networkInterface = Pcaps.getDevByName(chosenInterface);//Get the interface object
+        //String chosenInterface = getInterface();//Using user input choose an interface
+        //PcapNetworkInterface networkInterface = Pcaps.getDevByName(chosenInterface);//Get the interface object
 
-        //PcapNetworkInterface networkInterface = Pcaps.getDevByName("en0");//Get the interface object
+        PcapNetworkInterface networkInterface = Pcaps.getDevByName("en0");//Get the interface object
 
         //Params for incoming packets
         int snapshotLength = 65536;
@@ -25,7 +25,7 @@ public class Main {
             @Override
             public void gotPacket(Packet packet) {
                 EthPacket ep = new EthPacket(packet.getRawData());
-                ep.print();
+                //ep.print();
             }
         };
 

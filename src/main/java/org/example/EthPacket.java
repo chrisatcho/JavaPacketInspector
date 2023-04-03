@@ -1,16 +1,15 @@
 package org.example;
 
-import org.example.Packets.ARPPacket;
-import org.example.Packets.CRPacket;
-import org.example.Packets.IPv4Packet;
-import org.example.Packets.IPv6Packet;
+
+import org.example.Packets.CRPackets;
+import org.example.Packets.IPv4Header;
 
 public class EthPacket {
 
     String srcMac,destMac, ethType, IPtype, payload;
     EtherType etherType;
+    CRPackets packet;
 
-    CRPacket packet;
     enum EtherType {
         IPv4, //0800
         IPv6, //86DD
@@ -45,11 +44,11 @@ public class EthPacket {
         this.payload = s;
 
         if(this.ethType.equals("0800")){
-            this.packet = new IPv4Packet(this.payload);
+            this.packet = new IPv4Header(this.payload);
         } else if(this.ethType.equals("86DD")){
-            this.packet = new IPv6Packet(this.payload);
+            //this.packet = new IPv6Packet(this.payload);
         } else if(this.ethType.equals("0806")){
-            this.packet = new ARPPacket(this.payload);
+            //this.packet = new ARPPacket(this.payload);
         }
 
 
@@ -107,7 +106,7 @@ public class EthPacket {
 
     void print(){
         //System.out.println(this.tostring());
-        System.out.println( this.packet.tostring());
+        //System.out.println( this.packet.tostring());
         System.out.println();
     }
 }

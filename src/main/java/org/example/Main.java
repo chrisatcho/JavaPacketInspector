@@ -1,15 +1,17 @@
 package org.example;
 
 import org.pcap4j.core.*;
-import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.Packet;
+
 import java.util.List;
 import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) throws PcapNativeException, NotOpenException, InterruptedException {
         String chosenInterface = getInterface();//Using user input choose an interface
         PcapNetworkInterface networkInterface = Pcaps.getDevByName(chosenInterface);//Get the interface object
 
+        //PcapNetworkInterface networkInterface = Pcaps.getDevByName("en0");//Get the interface object
 
         //Params for incoming packets
         int snapshotLength = 65536;
@@ -17,28 +19,19 @@ public class Main {
         final PcapHandle handle = networkInterface.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, readTimeout);
 
 
+
         //Deals with the packets. More specifically, gotPacket() does
         PacketListener listener = new PacketListener() {
             @Override
             public void gotPacket(Packet packet) {
-                System.out.println(packet.toString());
                 EthPacket ep = new EthPacket(packet.getRawData());
-
-
-                /*byte[] bytes = packet.getRawData();
-                StringBuilder binary = new StringBuilder();
-                for (byte b : bytes) {
-                    binary.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
-                    binary.append(" ");
-                }
-                System.out.println(binary.toString() +"\n");
-                */
-
+                ep.print();
             }
         };
 
         //Keeps the interface open and then uses the listener object to handle the packet
         handle.loop(0,listener);
+
 
     }
 
@@ -50,11 +43,19 @@ public class Main {
         try{
             List<PcapNetworkInterface> interfaces = Pcaps.findAllDevs();
 
-            System.out.print("Choose one of the available interfaces: ");
+            System.out.println("Choose one of the available interfaces: ");
             for(PcapNetworkInterface p : interfaces)System.out.println(p.getName());
 
             Scanner myObj = new Scanner(System.in);
+
             String nif = myObj.nextLine();
+
+            while(!isValidInterface(interfaces, nif)){
+                System.out.println("Invalid Interface. Please choose one of the following: ");
+                for(PcapNetworkInterface p : interfaces)System.out.println(p.getName());
+                nif = myObj.nextLine();
+            }
+            myObj.close();
             return nif;
 
         } catch (PcapNativeException e){
@@ -62,5 +63,14 @@ public class Main {
         }
         return "Invalid Interface";
     }
+
+    static boolean isValidInterface(List<PcapNetworkInterface> ifs, String chosenIf){
+        for(PcapNetworkInterface p: ifs){
+            if(p.getName().equals(chosenIf))return true;
+        }
+        return false;
+    }
+
+
 
 }

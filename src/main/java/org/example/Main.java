@@ -19,11 +19,11 @@ public class Main {
         try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.NONPROMISCUOUS , readTimeout)) {
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
 
-            // Wild lambda function
             PacketListener listener = packet -> {
-                EthPacket ep = new EthPacket(packet.getRawData());
-                System.out.println(ep.tostring());
+                L2Packet Ethernet = PacketFactory.parseL2Packet(packet.getRawData());
+                L3Packet IP = PacketFactory.parseL3Packet(Ethernet);
             };
+
             handle.loop(0,listener);
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,5 +38,9 @@ public class Main {
             e.printStackTrace();
         }
         return device;
+    }
+
+    static void printPacket(Packet packet) {
+        System.out.println(packet);
     }
 }

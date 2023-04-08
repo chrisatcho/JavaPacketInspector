@@ -6,8 +6,6 @@ import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 
-// This project intakes packets using pcap4j, and then breaks them down into hex values, to be reconstructed into a custom packet class that can be used to analyze the packet.
-
 public class Main {
     public static void main(String[] args) throws PcapNativeException, NotOpenException, InterruptedException {
         PcapNetworkInterface nif = getInterface(); //Get the interface object
@@ -26,7 +24,6 @@ public class Main {
                 EthPacket ep = new EthPacket(packet.getRawData());
                 System.out.println(ep.tostring());
             };
-
             handle.loop(0,listener);
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,13 +32,11 @@ public class Main {
     }
     static PcapNetworkInterface getInterface() {
         PcapNetworkInterface device = null;
-
         try {
             device = new NifSelector().selectNetworkInterface();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return device;
     }
 }

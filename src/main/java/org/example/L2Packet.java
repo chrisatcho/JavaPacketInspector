@@ -25,10 +25,10 @@ public class L2Packet extends Packet {
             count += 1;
 
             if(count == 6){
-                this.destMac = s.toString();
+                this.destMac = formatMAC(s.toString());
                 s = new StringBuilder();
             } else if(count == 12){
-                this.srcMac = s.toString();
+                this.srcMac = formatMAC(s.toString());
                 s = new StringBuilder();
             } else if (count == 14){
                 this.ethType = getEthType(s.toString());
@@ -55,7 +55,14 @@ public class L2Packet extends Packet {
         return hex;
     }
 
+    public String formatMAC(String s) {
+        return s.substring(0, 2) + ":" + s.substring(2, 4) + ":" + s.substring(4, 6) + ":" + s.substring(6, 8) + ":" + s.substring(8, 10) + ":" + s.substring(10, 12);
+    }
+
     public void printAll() {
         System.out.println("Ethernet II, Src: " + this.srcMac + " , Dst: " + this.destMac);
+    }
+    public void printRaw() {
+        System.out.println(this.destMac + this.srcMac + this.ethType + this.payload);
     }
 }

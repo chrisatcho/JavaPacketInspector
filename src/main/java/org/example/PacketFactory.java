@@ -15,6 +15,9 @@ public class PacketFactory {
             case ARP -> {
                 return new ARPPacket(l2Packet.payload);
             }
+            case LLDP -> {
+                return new LLDPacket(l2Packet.payload);
+            }
             default -> {
                 return null;
             }

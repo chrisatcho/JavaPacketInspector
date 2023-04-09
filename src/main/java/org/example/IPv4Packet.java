@@ -24,16 +24,23 @@ public class IPv4Packet extends L3Packet {
         this.options         = s.substring(160, Integer.parseInt(IHL, 2) * 8);
         this.payload         = s.substring(Integer.parseInt(IHL, 2) * 8);
     }
-    public String printSrcIP() {
-        return this.srcIP;
+
+    public void printAll() {
+        System.out.println("Internet Protocol Version 4, Src: " + this.srcIP + ", Dst: " + this.destIP);
     }
-    public String printDestIP() {
-        return this.destIP;
+    public void printSrcIP() {
+        System.out.println(this.srcIP);
     }
-    public String printProtocol() {
+    public void printDestIP() {
+        System.out.println(this.destIP);
+    }
+    public String getProtocol() {
         return this.protocol;
     }
-    public String printPayload() {
-        System.out.println("Payload: " + this.payload);
+    public void printProtocol() {
+        System.out.println(this.protocol);
+    }
+    public void printPayload() {
+        System.out.println(this.payload);
     }
 }

@@ -1,5 +1,7 @@
 package org.example;
 
+// Handling the Link Layer
+
 public class L2Packet extends Packet {
     String destMac;
     String srcMac;
@@ -10,6 +12,7 @@ public class L2Packet extends Packet {
         IPV4, //0800
         IPV6, //86DD
         ARP, //0806
+        LLDP, //88CC
         NOT_SUPPORTED
     }
 
@@ -50,5 +53,9 @@ public class L2Packet extends Packet {
             hex = "0" + hex;
         }
         return hex;
+    }
+
+    public void printAll() {
+        System.out.println("Ethernet II, Src: " + this.srcMac + " , Dst: " + this.destMac);
     }
 }

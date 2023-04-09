@@ -1,8 +1,13 @@
 package org.example;
 
-abstract class L3Packet {
-    public abstract String printPayload();
-    public abstract String printSrcIP();
-    public abstract String printDestIP();
-    public abstract String printProtocol();
+// This packet handles the Network layer, but also the Data Link layer in some situations
+
+abstract class L3Packet extends Packet {
+    public abstract void parseVariables(String s);
+    public abstract void printAll();
+    public abstract void printPayload();
+    public abstract void printSrcIP();
+    public abstract void printDestIP();
+    public abstract void printProtocol();
+    public abstract String getProtocol();
 }

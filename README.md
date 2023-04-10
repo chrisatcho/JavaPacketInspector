@@ -1,6 +1,8 @@
-# JavaPacketInspector
+# Java Packet Inspector (JPI)
 
 A packet inspector built in Java for educational purposes in understanding the building bricks of networking.
+
+**Documentation:** https://kaitoy.github.io/pcap4j/javadoc/latest/en/overview-summary.html
 
 ## TODO
 
@@ -20,3 +22,4 @@ A packet inspector built in Java for educational purposes in understanding the b
   - [ ] Time based output
   - [ ] Buffer based output
   - [ ] TBD
+- [ ] Create user manual

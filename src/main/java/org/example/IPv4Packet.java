@@ -1,78 +1,56 @@
 package org.example;
 
-public class IPv4Packet implements CRPacket {
+public class IPv4Packet extends L3Packet {
+    String version, IHL, DSCP_ECN, totalLength, identification, flags, fragmentOffset, TTL, protocol, headerChecksum, srcIP, destIP, options, payload;
 
-    char version;
-    char headerLength;
-
-    int totalLength;
-    int identification;
-
-    String flags;
-    int fragmentOffset;
-
-    /*
-        Bits 0-3 - IPversion
-        Bits 4-7 - Header Length
-        Bits 8-13 - DSCP
-        Bits 14-15 - ECN
-        Bits 16-31 - Total Length
-        Bits 32-47 - Identification
-        Bits 48-50 - Flags- bit 0: Reserved; must be zero, bit 1: Don't Fragment (DF), bit 2: More Fragments (MF)
-        Bits 51-63 - Fragment Offset
-        Bits 64-71 - TTL
-        Bits 72-79 - Protocol
-        Bits 80-95 - Header Checksum
-        Bits 96-127 - Source Address
-        Bits 128-159 - Destination Address
-        Bits 160-192 - May be used if the header length > 5; Octets can be 20-56
-
-    */
-
-    IPv4Packet(String payload){
-        this.version = payload.charAt(0);
-        this.headerLength = payload.charAt(1);
-
-        this.totalLength = getIntFromHexString(payload.substring(4,8));
-        this.identification = getIntFromHexString(payload.substring(8,12));
-
-        this.flags = getFlags(payload.substring(12,16));
+    public IPv4Packet (String s) {
+        parseVariables(s);
     }
 
-    int getIntFromSingleHex(char hex){
-        return Integer.parseInt(String.valueOf(hex), 16);
-    }
-    int getIntFromHexString(String twoHex){
-        return Integer.parseInt(String.valueOf(twoHex),16);
+    public void parseVariables(String s) {
+        this.version         = s.substring(0, 1);
+        this.IHL             = s.substring(1, 2);
+        this.DSCP_ECN        = s.substring(2, 4);
+        this.totalLength     = s.substring(4, 8);
+        this.identification  = s.substring(8, 12);
+        this.flags           = s.substring(12, 13);
+        this.fragmentOffset  = s.substring(13, 16);
+        this.TTL             = s.substring(16, 18);
+        this.protocol        = matchProtocol(s.substring(18, 20));
+        this.headerChecksum  = s.substring(20, 24);
+        this.srcIP           = hexToIP(s.substring(24, 32));
+        this.destIP          = hexToIP(s.substring(32, 40));
+        if (Integer.parseInt(IHL, 16) * 2 > 40) {
+            this.options     = s.substring(40, Integer.parseInt(IHL, 16) * 2);
+            this.payload     = s.substring(Integer.parseInt(IHL, 16) * 2);
+        } else {
+            this.options     = "";
+            this.payload     = s.substring(40);
+        }
     }
 
-    String getFlags(String hex){
-        return hexToBin(hex).substring(0,3);
+    private static String hexToIP(String s) {
+        return Integer.parseInt(s.substring(0, 2), 16) + "." +
+                Integer.parseInt(s.substring(2, 4), 16) + "." +
+                Integer.parseInt(s.substring(4, 6), 16) + "." +
+                Integer.parseInt(s.substring(6, 8), 16);
     }
-    public String tostring(){
-        return " IPv4, length: " + getIntFromSingleHex(this.headerLength) + " with a total length of " + this.totalLength + ". Identification = " + this.identification + " Flags = " + this.flags;
+    public void printAll() {
+        System.out.println("Internet Protocol Version 4, Src: " + this.srcIP + ", Dst: " + this.destIP + ", Protocol: " + this.protocol);
     }
-
-    /*
-    LMAO THIS IS THE MOST UGLY FUNCTION BUT ITS FAST AND EFFECTIVE
-     */
-    private String hexToBin(String hex){
-        hex = hex.replaceAll("0", "0000");
-        hex = hex.replaceAll("1", "0001");
-        hex = hex.replaceAll("2", "0010");
-        hex = hex.replaceAll("3", "0011");
-        hex = hex.replaceAll("4", "0100");
-        hex = hex.replaceAll("5", "0101");
-        hex = hex.replaceAll("6", "0110");
-        hex = hex.replaceAll("7", "0111");
-        hex = hex.replaceAll("8", "1000");
-        hex = hex.replaceAll("9", "1001");
-        hex = hex.replaceAll("A", "1010");
-        hex = hex.replaceAll("B", "1011");
-        hex = hex.replaceAll("C", "1100");
-        hex = hex.replaceAll("D", "1101");
-        hex = hex.replaceAll("E", "1110");
-        hex = hex.replaceAll("F", "1111");
-        return hex;
+    public void printSrcIP() {
+        System.out.println(this.srcIP);
+    }
+    public void printDestIP() {
+        System.out.println(this.destIP);
+    }
+    public String getProtocol() {
+        return this.protocol;
+    }
+    public void printProtocol() {
+        System.out.println(this.protocol);
+    }
+    public void printPayload() {
+        System.out.println(this.payload);
     }
 }

@@ -65,4 +65,8 @@ public class L2Packet extends Packet {
     public void printRaw() {
         System.out.println(this.destMac + this.srcMac + this.ethType + this.payload);
     }
+
+    public EtherType getEthType(){
+        return this.ethType;
+    }
 }

@@ -26,6 +26,12 @@ public class LLDPacket extends L3Packet {
     public String getProtocol() {
         return this.ttl;
     }
+
+    @Override
+    public String getPayload() {
+        return this.payload;
+    }
+
     public void printProtocol() {
         System.out.println(this.ttl);
     }

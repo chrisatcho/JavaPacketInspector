@@ -15,10 +15,14 @@ abstract class L3Packet extends Packet {
     public abstract void printDestIP();
     public abstract void printProtocol();
     public abstract String getProtocol();
+
+    public abstract String getPayload();
     public String matchProtocol(String s) {
         Integer a = Integer.parseInt(s, 16);
         return protocolMap.get(a);
     }
+
+    //This map could potentially be moved elsewhere for better memory management.
     Map<Integer, String> protocolMap = Map.<Integer, String>ofEntries(
             entry(0, "HOPOPT"),  // IPv6 Hop-by-Hop Option
             entry(1, "ICMP"),  // Internet Control Message

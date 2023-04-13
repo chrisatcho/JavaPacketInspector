@@ -32,6 +32,11 @@ public class IPv6Packet extends L3Packet {
         return this.nextHeader;
     }
 
+    @Override
+    public String getPayload() {
+        return this.payload;
+    }
+
     public void printProtocol() {
         System.out.println(this.nextHeader);
     }

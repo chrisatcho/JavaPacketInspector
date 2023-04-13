@@ -47,10 +47,17 @@ public class IPv4Packet extends L3Packet {
     public String getProtocol() {
         return this.protocol;
     }
+
+    @Override
+    public String getPayload() {
+        return this.payload;
+    }
+
     public void printProtocol() {
         System.out.println(this.protocol);
     }
     public void printPayload() {
         System.out.println(this.payload);
     }
+
 }

@@ -21,7 +21,7 @@ public class Main {
         AtomicInteger count = new AtomicInteger();
 
         // A handle is an abstraction of a pointer, referring to the interface.
-        try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.NONPROMISCUOUS , readTimeout)) {
+        try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS , readTimeout)) {
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
 
             PacketListener listener = packet -> {
@@ -29,6 +29,8 @@ public class Main {
                 byte[] data = packet.getRawData();
                 L2Packet Ethernet = PacketFactory.parseL2Packet(data);
                 L3Packet l3 = PacketFactory.parseL3Packet(Ethernet);
+                L4Packet l4 = PacketFactory.parseL4Packet(l3, Ethernet);
+
                 if (printAll) {
                     System.out.println("Frame " + count.get() + ": "
                             + data.length + " bytes captured (" + data.length * 8 + " bits) on interface "
@@ -36,6 +38,7 @@ public class Main {
 
                     Ethernet.printAll();
                     if (l3 != null) l3.printAll();
+                    if (l4 != null) l4.printAll();
                 }
             };
 

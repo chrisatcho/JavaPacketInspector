@@ -37,10 +37,18 @@ public class ARPPacket extends L3Packet{
     public String getProtocol() {
         return this.opcode;
     }
+
+    @Override
+    public String getPayload() {
+        return this.payload;
+    }
+
     public void printProtocol() {
         System.out.println(this.opcode);
     }
     public void printPayload() {
         System.out.println(this.payload);
     }
+
+
 }

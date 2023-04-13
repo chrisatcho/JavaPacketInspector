@@ -38,15 +38,6 @@ public class EthPacket {
         }
         this.payload = s;
 
-        if(this.ethType.equals("0800")){
-//            this.packet = new IPv4Packet(this.payload);
-        } else if(this.ethType.equals("86DD")){
-            //this.packet = new IPv6Packet(this.payload);
-        }
-
-
-
-
         //System.out.println(formatMac(this.srcMac) + " " + formatMac(this.destMac) + " " + this.ethType + " " + this.payload.substring(2,6));
 //        System.out.println(this.packet.tostring());
         this.etherType = getEthertype(this.ethType);

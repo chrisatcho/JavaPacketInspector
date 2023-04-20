@@ -25,7 +25,7 @@ abstract class L3Packet extends Packet {
     //This map could potentially be moved elsewhere for better memory management.
     Map<Integer, String> protocolMap = Map.<Integer, String>ofEntries(
             entry(0, "HOPOPT"),  // IPv6 Hop-by-Hop Option
-            entry(1, "ICMP"),  // Internet Control Message
+            entry(1, "ICMP"),  // Internet Control Message 
             entry(2, "IGMP"),  // Internet Group Management
             entry(3, "GGP"),  // Gateway-to-Gateway
             entry(4, "IPv4"),  // IPv4 encapsulation

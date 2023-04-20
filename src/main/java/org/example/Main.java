@@ -20,6 +20,9 @@ public class Main {
         int readTimeout = 50;
         AtomicInteger count = new AtomicInteger();
 
+        //Output to a file
+        OutputToFile output = new OutputToFile("Output.txt");
+
         // A handle is an abstraction of a pointer, referring to the interface.
         try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS , readTimeout)) {
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
@@ -37,8 +40,14 @@ public class Main {
                             + nif.getName());
 
                     Ethernet.printAll();
-                    if (l3 != null) l3.printAll();
-                    if (l4 != null) l4.printAll();
+                    if (l3 != null) {
+                        System.out.print("|----");
+                        l3.printAll();
+                    }
+                    if (l4 != null) {
+                        System.out.print("|---------");
+                        l4.printAll();
+                    }
                 }
             };
 

@@ -28,14 +28,16 @@ public class IPv6Packet extends L3Packet {
     public void printDestIP() {
         System.out.println(this.destIP);
     }
-    public String getProtocol() {
-        return this.nextHeader;
-    }
-
     public void printProtocol() {
         System.out.println(this.nextHeader);
     }
     public void printPayload() {
         System.out.println(this.payload);
     }
+    public String getSrcIP() { return this.srcIP; }
+    public String getDestIP() { return this.destIP; }
+    public String getProtocol() {
+        return this.nextHeader;
+    }
+    public String getPayload() { return this.payload; }
 }

@@ -5,7 +5,7 @@ package org.example;
 public class L2Packet extends Packet {
     String destMac;
     String srcMac;
-    EtherType ethType;
+    String ethType;
     String payload;
 
     enum EtherType {
@@ -38,12 +38,13 @@ public class L2Packet extends Packet {
         this.payload = s.toString();
     }
 
-    public EtherType getEthType(String s) {
+    public String getEthType(String s) {
         return switch (s) {
-            case "0800" -> EtherType.IPV4;
-            case "86DD" -> EtherType.IPV6;
-            case "0806" -> EtherType.ARP;
-            default     -> EtherType.NOT_SUPPORTED;
+            case "0800" -> String.valueOf(EtherType.IPV4);
+            case "86DD" -> String.valueOf(EtherType.IPV6);
+            case "0806" -> String.valueOf(EtherType.ARP);
+            case "88CC" -> String.valueOf(EtherType.LLDP);
+            default     -> String.valueOf(EtherType.NOT_SUPPORTED);
         };
     }
 
@@ -60,9 +61,6 @@ public class L2Packet extends Packet {
     }
 
     public void printAll() {
-        System.out.println("Ethernet II, Src: " + this.srcMac + " , Dst: " + this.destMac);
-    }
-    public void printRaw() {
-        System.out.println(this.destMac + this.srcMac + this.ethType + this.payload);
+        System.out.println("Ethernet II, Src: " + this.srcMac + ", Dst: " + this.destMac);
     }
 }

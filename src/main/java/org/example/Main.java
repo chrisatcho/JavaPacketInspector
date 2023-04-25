@@ -97,10 +97,6 @@ public class Main {
         input = scanner.nextLine();
         if (!input.equals("")) params[4] = input;
 
-        for (String param : params) {
-            System.out.println(param);
-        }
-
         return params;
     }
 }

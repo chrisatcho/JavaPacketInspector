@@ -21,10 +21,10 @@ public class Main {
         AtomicInteger count = new AtomicInteger();
 
         //Output to a file
-        OutputToFile output = new OutputToFile("Output.txt");
+        OutputToFile output = OutputToFile.getOutputToFile();
 
         // A handle is an abstraction of a pointer, referring to the interface.
-        try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS , readTimeout)) {
+        try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.NONPROMISCUOUS , readTimeout)) {
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
 
             PacketListener listener = packet -> {

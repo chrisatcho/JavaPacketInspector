@@ -6,29 +6,36 @@ import java.util.Scanner;
 
 public class OutputToFile {
     FileWriter writer;
-    boolean rawHex;
+    public boolean rawHex;
     int amountToRecord;
+    int count;
+    public boolean closed;
     OutputToFile(String fileName, boolean rawHex, int amountToRecord){
         try {
             this.writer = new FileWriter(fileName);
             this.rawHex = rawHex;
             this.amountToRecord = amountToRecord;
+            this.count = 0;
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
     }
 
-    void writeToFile(String packetToWrite){
+    public void writeToFile(String packetToWrite){
         try{
-            writer.write(packetToWrite);
+            if(this.count > this.amountToRecord){
+                writer.close();
+                this.closed = true;
+            }
+            writer.write(packetToWrite +"\n");
         }
         catch(IOException e){
             e.printStackTrace();
         }
     }
 
-    void close(){
+    public void close(){
         try{
             writer.close();
         }

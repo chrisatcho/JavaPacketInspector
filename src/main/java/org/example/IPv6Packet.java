@@ -22,6 +22,7 @@ public class IPv6Packet extends L3Packet {
     public void printAll() {
         System.out.println("Internet Protocol Version 6, Src: " + this.srcIP + ", Dst: " + this.destIP);
     }
+    public String getString(){return "Internet Protocol Version 6, Src: " + this.srcIP + ", Dst: " + this.destIP;}
     public void printSrcIP() {
         System.out.println(this.srcIP);
     }

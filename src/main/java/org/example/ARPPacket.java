@@ -28,6 +28,15 @@ public class ARPPacket extends L3Packet{
             System.out.println("Who has " + this.targetIP + "? Tell " + this.senderIP);
         }
     }
+    public String getString(){
+        String output = "Address Resolution Protocol, Src: " + this.senderIP + ", Dst: " + this.targetIP;
+        if (this.targetIP.equals(this.senderIP)) {
+            output += "ARP Announcement for " + this.targetIP;
+        } else {
+            output += "Who has " + this.targetIP + "? Tell " + this.senderIP;
+        }
+        return output;
+    }
     public void printSrcIP() {
         System.out.println(this.senderIP);
     }

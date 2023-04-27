@@ -38,8 +38,6 @@ public class EthPacket {
         }
         this.payload = s;
 
-        //System.out.println(formatMac(this.srcMac) + " " + formatMac(this.destMac) + " " + this.ethType + " " + this.payload.substring(2,6));
-//        System.out.println(this.packet.tostring());
         this.etherType = getEthertype(this.ethType);
     }
 

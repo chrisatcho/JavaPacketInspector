@@ -62,10 +62,13 @@ public class L2Packet extends Packet {
     public void printAll() {
         System.out.println("Ethernet II, Src: " + this.srcMac + " , Dst: " + this.destMac);
     }
+
     public void printRaw() {
         System.out.println(this.destMac + this.srcMac + this.ethType + this.payload);
     }
 
+    public String getRawString(){return this.destMac + this.srcMac + this.ethType + this.payload;}
+    public String getString(){return "Ethernet II, Src: " + this.srcMac + " , Dst: " + this.destMac;}
     public EtherType getEthType(){
         return this.ethType;
     }

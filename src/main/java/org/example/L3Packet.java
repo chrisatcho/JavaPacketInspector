@@ -21,7 +21,7 @@ abstract class L3Packet extends Packet {
         Integer a = Integer.parseInt(s, 16);
         return protocolMap.get(a);
     }
-
+    public abstract String getString();
     //This map could potentially be moved elsewhere for better memory management.
     Map<Integer, String> protocolMap = Map.<Integer, String>ofEntries(
             entry(0, "HOPOPT"),  // IPv6 Hop-by-Hop Option

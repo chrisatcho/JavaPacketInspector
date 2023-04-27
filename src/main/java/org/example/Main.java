@@ -24,7 +24,7 @@ public class Main {
         OutputToFile output = OutputToFile.getOutputToFile();
 
         // A handle is an abstraction of a pointer, referring to the interface.
-        try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.NONPROMISCUOUS , readTimeout)) {
+        try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS , readTimeout)) {
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
 
             PacketListener listener = packet -> {
@@ -47,6 +47,13 @@ public class Main {
                     if (l4 != null) {
                         System.out.print("|---------");
                         l4.printAll();
+                    }
+                }
+                if(!output.equals(null) && !output.closed && output.amountToRecord != -1){
+                    if(output.rawHex)output.writeToFile(Ethernet.getRawString());
+                    else{
+                        String outputLine = Ethernet.getString() + "\n" + l3.getString() + "\n";
+                        output.writeToFile(outputLine);
                     }
                 }
             };

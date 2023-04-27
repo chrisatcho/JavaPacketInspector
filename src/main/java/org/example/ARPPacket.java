@@ -43,21 +43,14 @@ public class ARPPacket extends L3Packet{
     public void printDestIP() {
         System.out.println(this.targetIP);
     }
-    public String getProtocol() {
-        return this.opcode;
-    }
-
-    @Override
-    public String getPayload() {
-        return this.payload;
-    }
-
     public void printProtocol() {
         System.out.println(this.opcode);
     }
     public void printPayload() {
         System.out.println(this.payload);
     }
-
-
+    public String getSrcIP() { return this.senderIP; }
+    public String getDestIP() { return this.targetIP; }
+    public String getProtocol() { return this.opcode; }
+    public String getPayload() { return this.payload; }
 }

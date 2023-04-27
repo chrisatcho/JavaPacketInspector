@@ -45,22 +45,16 @@ public class IPv4Packet extends L3Packet {
     public void printDestIP() {
         System.out.println(this.destIP);
     }
-    public String getProtocol() {
-        return this.protocol;
-    }
-
-    @Override
-    public String getPayload() {
-        return this.payload;
-    }
-
     public void printProtocol() {
         System.out.println(this.protocol);
     }
     public void printPayload() {
         System.out.println(this.payload);
     }
-
-
-
+    public String getSrcIP() { return this.srcIP; }
+    public String getDestIP() { return this.destIP; }
+    public String getProtocol() {
+        return this.protocol;
+    }
+    public String getPayload() { return this.payload; }
 }

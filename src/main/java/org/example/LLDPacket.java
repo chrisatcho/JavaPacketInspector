@@ -24,19 +24,16 @@ public class LLDPacket extends L3Packet {
     public void printDestIP() {
         System.out.println(this.portID);
     }
-    public String getProtocol() {
-        return this.ttl;
-    }
-
-    @Override
-    public String getPayload() {
-        return this.payload;
-    }
-
     public void printProtocol() {
         System.out.println(this.ttl);
     }
     public void printPayload() {
         System.out.println(this.payload);
     }
+    public String getSrcIP() { return this.chassisID; }
+    public String getDestIP() { return this.portID; }
+    public String getProtocol() {
+        return this.ttl;
+    }
+    public String getPayload() { return this.payload; }
 }

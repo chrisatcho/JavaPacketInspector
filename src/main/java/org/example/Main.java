@@ -1,19 +1,24 @@
 package org.example;
 
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.pcap4j.core.*;
+import org.pcap4j.core.BpfProgram;
+import org.pcap4j.core.PacketListener;
+import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNetworkInterface;
-import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
+
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     public static void main(String[] args) {
-        PcapNetworkInterface nif = getInterface(); //Get the interface object
+        //Get the interface object
+        PcapNetworkInterface nif = getInterface();
         System.out.println(nif.getName());
 
-        boolean printAll = true;
+        // Get filter information
+        String[] filterList = getFilterParams();
+        Filter filter = new Filter(filterList[0], filterList[1], filterList[2], filterList[3], filterList[4]);
 
         //Params for incoming packets
         int snapshotLength = 65536;
@@ -32,29 +37,15 @@ public class Main {
                 byte[] data = packet.getRawData();
                 L2Packet Ethernet = PacketFactory.parseL2Packet(data);
                 L3Packet l3 = PacketFactory.parseL3Packet(Ethernet);
-                L4Packet l4 = PacketFactory.parseL4Packet(l3, Ethernet);
 
-                if (printAll) {
+                if (filter.check(l3)) {
                     System.out.println("Frame " + count.get() + ": "
                             + data.length + " bytes captured (" + data.length * 8 + " bits) on interface "
                             + nif.getName());
 
                     Ethernet.printAll();
-                    if (l3 != null) {
-                        System.out.print("|----");
-                        l3.printAll();
-                    }
-                    if (l4 != null) {
-                        System.out.print("|---------");
-                        l4.printAll();
-                    }
-                }
-                if(!output.equals(null) && !output.closed && output.amountToRecord != -1){
-                    if(output.rawHex)output.writeToFile(Ethernet.getRawString());
-                    else{
-                        String outputLine = Ethernet.getString() + "\n" + l3.getString() + "\n";
-                        output.writeToFile(outputLine);
-                    }
+                    l3.printAll();
+                    System.out.println("-------------------");
                 }
             };
 
@@ -65,6 +56,7 @@ public class Main {
             System.out.println("Error with handle.");
         }
     }
+
     static PcapNetworkInterface getInterface() {
         PcapNetworkInterface device = null;
         try {
@@ -73,5 +65,41 @@ public class Main {
             e.printStackTrace();
         }
         return device;
+    }
+    /*
+    Returns a list of parameters for the filter
+    Index: 0 - Source IP
+    Index: 1 - Destination IP
+    Index: 2 - Source Port
+    Index: 3 - Destination Port
+    Index: 4 - Protocol
+     */
+    static String[] getFilterParams() {
+        String input;
+        Scanner scanner = new Scanner(System.in);
+        String[] params = {"0.0.0.0/32", "0.0.0.0/32", "0", "0", ""};
+
+        System.out.println("Enter the following parameters for the filter: (Press enter to skip a parameter)");
+        System.out.println("Source IP (CIDR block): ");
+        input = scanner.nextLine();
+        if (!input.equals("")) params[0] = input;
+
+        System.out.println("Destination IP (CIDR block): ");
+        input = scanner.nextLine();
+        if (!input.equals("")) params[1] = input;
+
+        System.out.println("Source Port: ");
+        input = scanner.nextLine();
+        if (!input.equals("")) params[2] = input;
+
+        System.out.println("Destination Port: ");
+        input = scanner.nextLine();
+        if (!input.equals("")) params[3] = input;
+
+        System.out.println("Protocol: ");
+        input = scanner.nextLine();
+        if (!input.equals("")) params[4] = input;
+
+        return params;
     }
 }

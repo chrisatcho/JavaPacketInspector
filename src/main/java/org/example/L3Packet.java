@@ -14,6 +14,9 @@ abstract class L3Packet extends Packet {
     public abstract void printSrcIP();
     public abstract void printDestIP();
     public abstract void printProtocol();
+    public abstract String getPayload();
+    public abstract String getSrcIP();
+    public abstract String getDestIP();
     public abstract String getProtocol();
 
     public abstract String getPayload();

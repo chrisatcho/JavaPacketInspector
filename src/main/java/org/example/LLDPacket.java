@@ -17,6 +17,7 @@ public class LLDPacket extends L3Packet {
     public void printAll() {
         System.out.println("Link Layer Discovery Protocol, Src: " + this.chassisID + ", Dst: " + this.portID);
     }
+    public String getString(){return "Link Layer Discovery Protocol, Src: " + this.chassisID + ", Dst: " + this.portID;}
     public void printSrcIP() {
         System.out.println(this.chassisID);
     }

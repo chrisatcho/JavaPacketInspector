@@ -38,7 +38,7 @@ public class IPv4Packet extends L3Packet {
     public void printAll() {
         System.out.println("Internet Protocol Version 4, Src: " + this.srcIP + ", Dst: " + this.destIP + ", Protocol: " + this.protocol);
     }
-
+    public String getString(){return "Internet Protocol Version 4, Src: " + this.srcIP + ", Dst: " + this.destIP + ", Protocol: " + this.protocol;}
     public void printSrcIP() {
         System.out.println(this.srcIP);
     }

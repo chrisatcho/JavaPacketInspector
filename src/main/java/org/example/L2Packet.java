@@ -8,6 +8,7 @@ public class L2Packet extends Packet {
     String ethType;
     String payload;
 
+    String rawHex;
     enum EtherType {
         IPV4, //0800
         IPV6, //86DD
@@ -18,6 +19,7 @@ public class L2Packet extends Packet {
 
     public L2Packet(byte[] bs){
         StringBuilder s = new StringBuilder();
+        this.rawHex = "";
         int count = 0;
         for(byte b: bs){
             String hexToByte = byteToHex(b);
@@ -25,16 +27,20 @@ public class L2Packet extends Packet {
             count += 1;
 
             if(count == 6){
+                this.rawHex += s.toString();
                 this.destMac = formatMAC(s.toString());
                 s = new StringBuilder();
             } else if(count == 12){
+                this.rawHex += s.toString();
                 this.srcMac = formatMAC(s.toString());
                 s = new StringBuilder();
             } else if (count == 14){
+                this.rawHex += s.toString();
                 this.ethType = getEthType(s.toString());
                 s = new StringBuilder();
             }
         }
+        this.rawHex += s.toString();
         this.payload = s.toString();
     }
 
@@ -63,4 +69,8 @@ public class L2Packet extends Packet {
     public void printAll() {
         System.out.println("Ethernet II, Src: " + this.srcMac + ", Dst: " + this.destMac);
     }
+
+    public String getString(){return "Ethernet II, Src: " + this.srcMac + ", Dst: " + this.destMac;};
+
+    public String getRawHex(){return this.rawHex;}
 }

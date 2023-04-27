@@ -9,7 +9,6 @@ import org.pcap4j.util.NifSelector;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
-
 public class Main {
     public static void main(String[] args) {
         //Get the interface object
@@ -28,16 +27,40 @@ public class Main {
         //Output to a file
         OutputToFile output = OutputToFile.getOutputToFile();
 
+
+
         // A handle is an abstraction of a pointer, referring to the interface.
         try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS , readTimeout)) {
+            Thread userInputThread = new Thread(() -> {
+                System.out.println("Press Enter to stop packet capture...");
+                try {
+                    while (System.in.available() == 0) {
+                        Thread.sleep(100); // wait until input is available
+                    }
+                    // flush any pending input
+                    while (System.in.available() > 0) {
+                        System.in.read();
+                    }
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(output != null){
+                    output.close();
+                    System.out.println(output.count + " packets recorded in file: " + output.filename);
+                }
+                System.out.println(count.get() + " packets captured");
+                System.exit(0);
+            });
+
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
 
             PacketListener listener = packet -> {
+
                 count.getAndIncrement();
                 byte[] data = packet.getRawData();
                 L2Packet Ethernet = PacketFactory.parseL2Packet(data);
                 L3Packet l3 = PacketFactory.parseL3Packet(Ethernet);
-                L4Packet l4 = PacketFactory.parseL4Packet(l3, Ethernet);
+                L4Packet l4 = PacketFactory.parseL4Packet(l3);
 
                 if (filter.check(l3) && filter.check(l4)) {
                     System.out.println("Frame " + count.get() + ": "
@@ -49,9 +72,18 @@ public class Main {
                     l4.printAll();
                     System.out.println("-------------------");
 
+                    if(output != null && !output.closed){
+                        if(output.rawHex){
+                            output.writeToFile(Ethernet.getRawHex());
+                        }
+                        else{
+                            String outputLine = Ethernet.getString() + "\n" + l3.getString() + "\n" + l4.getString();
+                            output.writeToFile(outputLine);
+                        }
+                    }
                 }
             };
-
+            userInputThread.start();
             handle.loop(0,listener);
 
         } catch (Exception e) {
@@ -80,7 +112,7 @@ public class Main {
     static String[] getFilterParams() {
         String input;
         Scanner scanner = new Scanner(System.in);
-        String[] params = {"0.0.0.0/32", "0.0.0.0/32", "0", "0", ""};
+        String[] params = {"0.0.0.0/32", "0.0.0.0/32", "-1", "-1", ""};
 
         System.out.println("Enter the following parameters for the filter: (Press enter to skip a parameter)");
         System.out.println("Source IP (CIDR block): ");

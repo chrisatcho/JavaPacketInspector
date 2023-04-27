@@ -19,7 +19,6 @@ abstract class L3Packet extends Packet {
     public abstract String getDestIP();
     public abstract String getProtocol();
 
-    public abstract String getPayload();
     public String matchProtocol(String s) {
         Integer a = Integer.parseInt(s, 16);
         return protocolMap.get(a);

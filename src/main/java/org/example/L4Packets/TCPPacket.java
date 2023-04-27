@@ -59,4 +59,6 @@ public class TCPPacket extends L4Packet {
 
     public int getSourcePort(){return this.sourcePort;}
     public int getDestPort(){return this.destPort;}
+
+    public String getString(){return this.protocol + " " + this.sourcePort + " > " + this.destPort + " Length: " +this.windowSize;}
 }

@@ -8,12 +8,16 @@ public class OutputToFile {
     FileWriter writer;
     public boolean rawHex;
     int amountToRecord;
+    public boolean sizeBuffer;
     int count;
     public boolean closed;
+    public String filename;
     OutputToFile(String fileName, boolean rawHex, int amountToRecord){
         try {
+            this.filename = fileName;
             this.writer = new FileWriter(fileName);
             this.rawHex = rawHex;
+            this.sizeBuffer = amountToRecord != -1;
             this.amountToRecord = amountToRecord;
             this.count = 0;
         } catch (IOException e) {
@@ -24,11 +28,16 @@ public class OutputToFile {
 
     public void writeToFile(String packetToWrite){
         try{
-            if(this.count > this.amountToRecord){
+            if(!this.closed && this.count < this.amountToRecord && this.sizeBuffer){
                 writer.close();
+                System.out.println("WRITER CLOSED --------------------------------------------------------------");
                 this.closed = true;
             }
-            writer.write(packetToWrite +"\n");
+            else{
+                System.out.println(packetToWrite);
+                writer.write(packetToWrite +"\n");
+                writer.flush();
+            }
         }
         catch(IOException e){
             e.printStackTrace();

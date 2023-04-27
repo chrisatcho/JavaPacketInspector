@@ -26,10 +26,7 @@ public class PacketFactory {
         }
     }
 
-    public static L4Packet parseL4Packet(L3Packet l3Packet, L2Packet l2Packet){
-
-        if(l2Packet.getEthType() != L2Packet.EtherType.IPV4 && l2Packet.getEthType() != L2Packet.EtherType.IPV6) return null;
-
+    public static L4Packet parseL4Packet(L3Packet l3Packet){
         switch (l3Packet.getProtocol()){
             case "TCP" ->{
                 return new TCPPacket(l3Packet.getPayload(), "TCP");

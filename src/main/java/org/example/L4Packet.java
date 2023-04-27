@@ -10,4 +10,6 @@ public abstract class L4Packet extends Packet{
 
     public abstract  int getDestPort();
 
+    public abstract String getString();
+
 }

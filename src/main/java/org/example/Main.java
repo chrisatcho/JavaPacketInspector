@@ -7,8 +7,12 @@ import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.util.NifSelector;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 public class Main {
     public static void main(String[] args) {
         //Get the interface object
@@ -77,7 +81,8 @@ public class Main {
                             output.writeToFile(Ethernet.getRawHex());
                         }
                         else{
-                            String outputLine = Ethernet.getString() + "\n" + l3.getString() + "\n" + l4.getString();
+                            String outputLine = getTime() + " " + Ethernet.getString() + "\n                " + l3.getString() + "\n                " + l4.getString();
+
                             output.writeToFile(outputLine);
                         }
                     }
@@ -136,5 +141,16 @@ public class Main {
         if (!input.equals("")) params[4] = input;
 
         return params;
+    }
+
+    static String getTime(){
+        try{
+            Date now = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss.SSSSSS");
+            String formattedTime = formatter.format(now);
+            return formattedTime;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

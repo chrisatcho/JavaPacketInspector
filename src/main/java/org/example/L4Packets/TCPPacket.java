@@ -56,4 +56,7 @@ public class TCPPacket extends L4Packet {
     public void printPayload(){
         System.out.println(this.payload);
     }
+
+    public int getSourcePort(){return this.sourcePort;}
+    public int getDestPort(){return this.destPort;}
 }

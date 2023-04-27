@@ -37,15 +37,18 @@ public class Main {
                 byte[] data = packet.getRawData();
                 L2Packet Ethernet = PacketFactory.parseL2Packet(data);
                 L3Packet l3 = PacketFactory.parseL3Packet(Ethernet);
+                L4Packet l4 = PacketFactory.parseL4Packet(l3, Ethernet);
 
-                if (filter.check(l3)) {
+                if (filter.check(l3) && filter.check(l4)) {
                     System.out.println("Frame " + count.get() + ": "
                             + data.length + " bytes captured (" + data.length * 8 + " bits) on interface "
                             + nif.getName());
 
                     Ethernet.printAll();
                     l3.printAll();
+                    l4.printAll();
                     System.out.println("-------------------");
+
                 }
             };
 

@@ -6,4 +6,8 @@ public abstract class L4Packet extends Packet{
 
     public abstract void printAll();
 
+    public abstract int getSourcePort();
+
+    public abstract  int getDestPort();
+
 }

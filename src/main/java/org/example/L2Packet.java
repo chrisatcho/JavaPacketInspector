@@ -31,7 +31,7 @@ public class L2Packet extends Packet {
                 this.srcMac = formatMAC(s.toString());
                 s = new StringBuilder();
             } else if (count == 14){
-                this.ethType = EtherType.valueOf(getEthType(s.toString()));
+                this.ethType = getEthType(s.toString());
                 s = new StringBuilder();
             }
         }

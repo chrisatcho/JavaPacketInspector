@@ -3,9 +3,10 @@ package org.example;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.io.BufferedWriter;
 
 public class OutputToFile {
-    FileWriter writer;
+    BufferedWriter writer;
     public boolean rawHex;
     int amountToRecord;
     public boolean sizeBuffer;
@@ -15,7 +16,7 @@ public class OutputToFile {
     OutputToFile(String fileName, boolean rawHex, int amountToRecord){
         try {
             this.filename = fileName;
-            this.writer = new FileWriter(fileName);
+            this.writer = new BufferedWriter(new FileWriter(fileName));
             this.rawHex = rawHex;
             this.sizeBuffer = amountToRecord != -1;
             this.amountToRecord = amountToRecord;
@@ -28,13 +29,12 @@ public class OutputToFile {
 
     public void writeToFile(String packetToWrite){
         try{
-            if(!this.closed && this.count < this.amountToRecord && this.sizeBuffer){
+            if(!this.closed && this.count >= this.amountToRecord && this.sizeBuffer){
                 writer.close();
-                System.out.println("WRITER CLOSED --------------------------------------------------------------");
                 this.closed = true;
             }
             else{
-                System.out.println(packetToWrite);
+                this.count++;
                 writer.write(packetToWrite +"\n");
                 writer.flush();
             }
@@ -61,13 +61,12 @@ public class OutputToFile {
             System.out.println("Would you like to output the packets to a file? y/n: ");
             String ans = inputScanner.nextLine();
 
-            if(!ans.toLowerCase().equals("y"))return null;
+            if(!ans.equalsIgnoreCase("y"))return null;
 
             System.out.println("Would you like the packets in Raw Hex [1], or already decoded [2]? ");
             ans = inputScanner.nextLine();
 
-            if(ans.equals("1"))rawHex = true;
-            else rawHex = false;
+            rawHex = ans.equals("1");
 
             System.out.println("Would you like to record a certain amount of packets? Either input the amount to record, or press Enter for no.");
             ans = inputScanner.nextLine();

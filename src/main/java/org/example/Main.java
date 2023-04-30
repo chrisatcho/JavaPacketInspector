@@ -31,15 +31,17 @@ public class Main {
         //Output to a file
         OutputToFile output = OutputToFile.getOutputToFile();
 
-
+        //Buffer for packets so none are missed
+        PacketBuffer buffer = new PacketBuffer(filter, output);
 
         // A handle is an abstraction of a pointer, referring to the interface.
         try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS , readTimeout)) {
+
             Thread userInputThread = new Thread(() -> {
                 System.out.println("Press Enter to stop packet capture...");
                 try {
                     while (System.in.available() == 0) {
-                        Thread.sleep(100); // wait until input is available
+                        Thread.sleep(50); // wait until input is available
                     }
                     // flush any pending input
                     while (System.in.available() > 0) {
@@ -56,24 +58,29 @@ public class Main {
                 System.exit(0);
             });
 
+            Thread packetBuffer = new Thread(() -> {
+                buffer.handlePacketsBuffer();
+            });
+
+            packetBuffer.start();
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
 
             PacketListener listener = packet -> {
 
                 count.getAndIncrement();
                 byte[] data = packet.getRawData();
-                L2Packet Ethernet = PacketFactory.parseL2Packet(data);
-                L3Packet l3 = PacketFactory.parseL3Packet(Ethernet);
-                L4Packet l4 = PacketFactory.parseL4Packet(l3);
+                L2Packet Ethernet = new L2Packet(data);
 
-                if (filter.check(l3) && filter.check(l4)) {
+                buffer.addPacket(Ethernet);
+
+                /*if (filter.check(l3) /*&& filter.check(l4)) {
                     System.out.println("Frame " + count.get() + ": "
                             + data.length + " bytes captured (" + data.length * 8 + " bits) on interface "
                             + nif.getName());
 
                     Ethernet.printAll();
                     l3.printAll();
-                    l4.printAll();
+                   // l4.printAll();
                     System.out.println("-------------------");
 
                     if(output != null && !output.closed){
@@ -81,13 +88,15 @@ public class Main {
                             output.writeToFile(Ethernet.getRawHex());
                         }
                         else{
-                            String outputLine = getTime() + " " + Ethernet.getString() + "\n                " + l3.getString() + "\n                " + l4.getString();
+                            String outputLine = getTime() + " " + Ethernet.getString() + "\n                " + l3.getString() + "\n"/*                " + l4.getString();
 
                             output.writeToFile(outputLine);
                         }
                     }
-                }
+                }*/
+
             };
+
             userInputThread.start();
             handle.loop(0,listener);
 
@@ -143,14 +152,5 @@ public class Main {
         return params;
     }
 
-    static String getTime(){
-        try{
-            Date now = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss.SSSSSS");
-            String formattedTime = formatter.format(now);
-            return formattedTime;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }

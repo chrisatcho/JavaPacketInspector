@@ -53,9 +53,7 @@ public class Main {
                 System.exit(0);
             });
 
-            Thread packetBuffer = new Thread(() -> {
-                buffer.handlePacketsBuffer();
-            });
+            Thread packetBuffer = new Thread(buffer::handlePacketsBuffer);
 
             packetBuffer.start();
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);

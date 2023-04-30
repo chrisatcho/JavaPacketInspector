@@ -45,7 +45,7 @@ public class TCPPacket extends L4Packet {
     }
     @Override
     public void printAll() {
-        String print = this.protocol + " " + this.sourcePort + " > " + this.destPort + " "+  getFlagsString() +" Length: " +this.windowSize;;
+        String print = this.protocol + " " + this.sourcePort + " > " + this.destPort + " "+  getFlagsString() + " " + getInfo();
         System.out.println(print);
     }
 
@@ -61,25 +61,29 @@ public class TCPPacket extends L4Packet {
 
     public String getFlagsString(){
         String[] flagsString = {"CWR", "ECE", "URG", "ACK", "PSH", "RST", "SYN", "FIN"};
-        String flagReturn = "";
+        StringBuilder flagReturn = new StringBuilder();
         boolean multiple = false;
         for (int i = 0; i < Integer.SIZE; i++) {
             if ((this.flags & (1 << i)) != 0) {
                 if(multiple){
-                    flagReturn += ", " + flagsString[i];
+                    flagReturn.append(", " + flagsString[i]);
                 } else {
-                    flagReturn += flagsString[i];
+                    flagReturn.append(flagsString[i]);
                     multiple = true;
                 }
             }
         }
 
-        if(multiple) return "[" + flagReturn + "]";
+        if(multiple) return "[" + flagReturn.toString() + "]";
         else return "";
     }
 
     //TODO
     public String getInfo(){
-        return "";
+        StringBuilder info = new StringBuilder();
+        info.append(" Seq=" + this.seqNum);
+        if(this.ACK)info.append(" Ack=" + this.ackNum);
+
+        return info.toString();
     }
 }

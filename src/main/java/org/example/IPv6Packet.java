@@ -5,6 +5,7 @@ public class IPv6Packet extends L3Packet {
 
     public IPv6Packet (String s) {
         parseVariables(s);
+        System.out.println("!Pv6666");
     }
 
     public void parseVariables(String s) {

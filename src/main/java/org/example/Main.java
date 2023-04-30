@@ -7,11 +7,7 @@ import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.util.NifSelector;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 
 public class Main {
     public static void main(String[] args) {
@@ -88,6 +84,7 @@ public class Main {
         }
         return device;
     }
+
     /*
     Returns a list of parameters for the filter
     Index: 0 - Source IP
@@ -96,6 +93,7 @@ public class Main {
     Index: 3 - Destination Port
     Index: 4 - Protocol
      */
+
     static String[] getFilterParams() {
         String input;
         Scanner scanner = new Scanner(System.in);

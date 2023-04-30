@@ -12,7 +12,7 @@ public class TCPPacket extends L4Packet {
     long windowSize;
     String checksum;
     long urgPointer;
-
+    int flags;
     String payload;
     public TCPPacket(String payload, String protocol){
         this.protocol = protocol;
@@ -24,15 +24,15 @@ public class TCPPacket extends L4Packet {
 
         this.dataOffset = HexHelper.hexToLong(payload.substring(24,25));
 
-        int flags = HexHelper.hexToInt(payload.substring(26,28));
-        this.CWR = (flags & 0x80) != 0;
-        this.ECE = (flags & 0x40) != 0;
-        this.URG = (flags & 0x20) != 0;
-        this.ACK = (flags & 0x10) != 0;
-        this.PSH = (flags & 0x08) != 0;
-        this.RST = (flags & 0x04) != 0;
-        this.SYN = (flags & 0x02) != 0;
-        this.FIN = (flags & 0x01) != 0;
+        this.flags = HexHelper.hexToInt(payload.substring(26,28));
+        this.CWR = (this.flags & 0x80) != 0;
+        this.ECE = (this.flags & 0x40) != 0;
+        this.URG = (this.flags & 0x20) != 0;
+        this.ACK = (this.flags & 0x10) != 0;
+        this.PSH = (this.flags & 0x08) != 0;
+        this.RST = (this.flags & 0x04) != 0;
+        this.SYN = (this.flags & 0x02) != 0;
+        this.FIN = (this.flags & 0x01) != 0;
 
         this.windowSize = HexHelper.hexToLong(payload.substring(28,32));
 
@@ -45,7 +45,7 @@ public class TCPPacket extends L4Packet {
     }
     @Override
     public void printAll() {
-        String print = this.protocol + " " + this.sourcePort + " > " + this.destPort;
+        String print = this.protocol + " " + this.sourcePort + " > " + this.destPort + " "+  getFlagsString() +" Length: " +this.windowSize;;
         System.out.println(print);
     }
 
@@ -57,5 +57,29 @@ public class TCPPacket extends L4Packet {
     public int getSourcePort(){return this.sourcePort;}
     public int getDestPort(){return this.destPort;}
 
-    public String getString(){return this.protocol + " " + this.sourcePort + " > " + this.destPort + " Length: " +this.windowSize;}
+    public String getString(){return this.protocol + " " + this.sourcePort + " > " + this.destPort + " "+  getFlagsString() +" Length: " +this.windowSize;}
+
+    public String getFlagsString(){
+        String[] flagsString = {"CWR", "ECE", "URG", "ACK", "PSH", "RST", "SYN", "FIN"};
+        String flagReturn = "";
+        boolean multiple = false;
+        for (int i = 0; i < Integer.SIZE; i++) {
+            if ((this.flags & (1 << i)) != 0) {
+                if(multiple){
+                    flagReturn += ", " + flagsString[i];
+                } else {
+                    flagReturn += flagsString[i];
+                    multiple = true;
+                }
+            }
+        }
+
+        if(multiple) return "[" + flagReturn + "]";
+        else return "";
+    }
+
+    //TODO
+    public String getInfo(){
+        return "";
+    }
 }

@@ -32,6 +32,7 @@ public class Filter {
         return true;
     }
     public boolean check(L4Packet l4packet) {
+        if(l4packet == null)return true;
         if (!(l4packet.getSourcePort() == this.SourcePort) && this.SourcePort != -1) {
             return false;
         }

@@ -8,6 +8,8 @@ public class L2Packet extends Packet {
     String ethType;
     String payload;
 
+    String nif;
+
     String rawHex;
     enum EtherType {
         IPV4, //0800
@@ -17,7 +19,9 @@ public class L2Packet extends Packet {
         NOT_SUPPORTED
     }
 
-    public L2Packet(byte[] bs){
+    public L2Packet(byte[] bs, String nif){
+        this.nif = nif;
+
         StringBuilder s = new StringBuilder();
         this.rawHex = "";
         int count = 0;

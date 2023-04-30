@@ -4,16 +4,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PacketBuffer {
     BlockingQueue<L2Packet> queue;
     Filter filter;
 
     OutputToFile output;
+    AtomicInteger count;
     PacketBuffer(Filter filter, OutputToFile output){
         this.queue = new LinkedBlockingQueue<L2Packet>();;
         this.filter = filter;
         this.output = output;
+        this.count = new AtomicInteger();
     }
     void addPacket(L2Packet l2){
         try{
@@ -29,18 +32,22 @@ public class PacketBuffer {
         while(true){
             try {
                 if(!this.queue.isEmpty()){
+                    count.getAndIncrement();
+
                     L2Packet Ethernet = this.queue.take();
                     L3Packet l3 = PacketFactory.parseL3Packet(Ethernet);
                     L4Packet l4 = PacketFactory.parseL4Packet(l3);
 
                     if (filter.check(l3) && filter.check(l4)) {
-                    /*System.out.println("Frame " + count.get() + ": "
-                            + data.length + " bytes captured (" + data.length * 8 + " bits) on interface "
-                            + nif.getName());*/
+                    System.out.println("Frame " + count.get() + ": "
+                            + Ethernet.rawHex.length()/2 + " bytes captured (" + Ethernet.rawHex.length() * 4 + " bits) on interface "
+                            + Ethernet.nif);
 
                     Ethernet.printAll();
-                    l3.printAll();
-                    l4.printAll();
+
+                    if(l3 != null) l3.printAll();
+
+                    if(l4 != null) l4.printAll();
                     System.out.println("-------------------");
 
                     if(output != null && !output.closed){

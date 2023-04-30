@@ -26,7 +26,6 @@ public class Main {
         //Params for incoming packets
         int snapshotLength = 65536;
         int readTimeout = 50;
-        AtomicInteger count = new AtomicInteger();
 
         //Output to a file
         OutputToFile output = OutputToFile.getOutputToFile();
@@ -54,7 +53,7 @@ public class Main {
                     output.close();
                     System.out.println(output.count + " packets recorded in file: " + output.filename);
                 }
-                System.out.println(count.get() + " packets captured");
+                System.out.println(buffer.count.get() + " packets captured");
                 System.exit(0);
             });
 
@@ -66,35 +65,9 @@ public class Main {
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
 
             PacketListener listener = packet -> {
-
-                count.getAndIncrement();
                 byte[] data = packet.getRawData();
-                L2Packet Ethernet = new L2Packet(data);
-
+                L2Packet Ethernet = new L2Packet(data, nif.getName());
                 buffer.addPacket(Ethernet);
-
-                /*if (filter.check(l3) /*&& filter.check(l4)) {
-                    System.out.println("Frame " + count.get() + ": "
-                            + data.length + " bytes captured (" + data.length * 8 + " bits) on interface "
-                            + nif.getName());
-
-                    Ethernet.printAll();
-                    l3.printAll();
-                   // l4.printAll();
-                    System.out.println("-------------------");
-
-                    if(output != null && !output.closed){
-                        if(output.rawHex){
-                            output.writeToFile(Ethernet.getRawHex());
-                        }
-                        else{
-                            String outputLine = getTime() + " " + Ethernet.getString() + "\n                " + l3.getString() + "\n"/*                " + l4.getString();
-
-                            output.writeToFile(outputLine);
-                        }
-                    }
-                }*/
-
             };
 
             userInputThread.start();

@@ -17,7 +17,7 @@ public class Main {
 
         // Get filter information
         String[] filterList = getFilterParams();
-        Filter filter = new Filter(filterList[0], filterList[1], filterList[2], filterList[3], filterList[4]);
+        Filter filter = new Filter(filterList[0], filterList[1], filterList[2], filterList[3], filterList[4], filterList[5]);
 
         //Params for incoming packets
         int snapshotLength = 65536;
@@ -95,7 +95,7 @@ public class Main {
     static String[] getFilterParams() {
         String input;
         Scanner scanner = new Scanner(System.in);
-        String[] params = {"0.0.0.0/32", "0.0.0.0/32", "-1", "-1", ""};
+        String[] params = {"0.0.0.0/32", "0.0.0.0/32", "-1", "-1", "", "2"};
 
         System.out.println("Enter the following parameters for the filter: (Press enter to skip a parameter)");
         System.out.println("Source IP (CIDR block): ");
@@ -117,6 +117,10 @@ public class Main {
         System.out.println("Protocol: ");
         input = scanner.nextLine();
         if (!input.equals("")) params[4] = input;
+
+        System.out.println("Short[1] or Verbose[2]");
+        input = scanner.nextLine();
+        if (!input.equals("")) params[5] = input;
 
         return params;
     }

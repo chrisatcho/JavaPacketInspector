@@ -9,7 +9,7 @@ import static java.util.Map.entry;
 abstract class L3Packet extends Packet {
 
     public abstract void parseVariables(String s);
-    public abstract void printAll();
+    public abstract void printAll(String srcIPHostname, String destIPHostname, boolean verbose);
     public abstract void printPayload();
     public abstract void printSrcIP();
     public abstract void printDestIP();
@@ -23,7 +23,9 @@ abstract class L3Packet extends Packet {
         Integer a = Integer.parseInt(s, 16);
         return protocolMap.get(a);
     }
-    public abstract String getString();
+    public abstract String getString(String srcIPHostname, String destIPHostname);
+
+    public abstract String getShortString(String srcIPHostname, String destIPHostname);
 
     //This map could potentially be moved elsewhere for better memory management.
     Map<Integer, String> protocolMap = Map.<Integer, String>ofEntries(

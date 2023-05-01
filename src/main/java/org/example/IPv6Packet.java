@@ -5,7 +5,6 @@ public class IPv6Packet extends L3Packet {
 
     public IPv6Packet (String s) {
         parseVariables(s);
-        System.out.println("!Pv6666");
     }
 
     public void parseVariables(String s) {
@@ -20,10 +19,13 @@ public class IPv6Packet extends L3Packet {
         this.payload        = s.substring(192);
     }
 
-    public void printAll() {
-        System.out.println("Internet Protocol Version 6, Src: " + this.srcIP + ", Dst: " + this.destIP);
+    public void printAll(String srcIPHostname, String destIPHostname, boolean verbose) {
+        if(verbose) System.out.println("Internet Protocol Version 6, Src: " + this.srcIP + ", Dst: " + this.destIP);
+        else System.out.print(getShortString(srcIPHostname, destIPHostname));
     }
-    public String getString(){return "Internet Protocol Version 6, Src: " + this.srcIP + ", Dst: " + this.destIP;}
+    public String getString(String srcIPHostname, String destIPHostname){return "Internet Protocol Version 6, Src: " + this.srcIP + ", Dst: " + this.destIP;}
+    public String getShortString(String srcIPHostname, String destIPHostname){return " IPv6 " + this.srcIP + "-->" + this.destIP;}
+
     public void printSrcIP() {
         System.out.println(this.srcIP);
     }

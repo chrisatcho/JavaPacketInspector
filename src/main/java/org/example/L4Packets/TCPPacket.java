@@ -44,9 +44,9 @@ public class TCPPacket extends L4Packet {
         }
     }
     @Override
-    public void printAll() {
-        String print = this.protocol + " " + this.sourcePort + " > " + this.destPort + " "+  getFlagsString() + " " + getInfo();
-        System.out.println(print);
+    public void printAll(boolean verbose) {
+        if(verbose)System.out.println(this.getString());
+        else System.out.println(this.getShortString());
     }
 
     @Override
@@ -57,7 +57,7 @@ public class TCPPacket extends L4Packet {
     public int getSourcePort(){return this.sourcePort;}
     public int getDestPort(){return this.destPort;}
 
-    public String getString(){return this.protocol + " " + this.sourcePort + " > " + this.destPort + " "+  getFlagsString() +" Length: " +this.windowSize;}
+    public String getString(){return this.protocol + " " + this.sourcePort + " > " + this.destPort + " "+  getFlagsString() + getInfo();}
 
     public String getFlagsString(){
         String[] flagsString = {"CWR", "ECE", "URG", "ACK", "PSH", "RST", "SYN", "FIN"};
@@ -83,7 +83,11 @@ public class TCPPacket extends L4Packet {
         StringBuilder info = new StringBuilder();
         info.append(" Seq=" + this.seqNum);
         if(this.ACK)info.append(" Ack=" + this.ackNum);
-
+        info.append(" WindowSize= " + this.windowSize);
         return info.toString();
+    }
+
+    public String getShortString(){
+        return "TCP " + this.sourcePort + ">" + this.destPort + " " + this.getInfo();
     }
 }

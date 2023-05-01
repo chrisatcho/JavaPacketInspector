@@ -12,11 +12,13 @@ public class PacketBuffer {
 
     OutputToFile output;
     AtomicInteger count;
+    ARPTable arp;
     PacketBuffer(Filter filter, OutputToFile output){
         this.queue = new LinkedBlockingQueue<L2Packet>();;
         this.filter = filter;
         this.output = output;
         this.count = new AtomicInteger();
+        this.arp = new ARPTable();
     }
     void addPacket(L2Packet l2){
         try{
@@ -29,6 +31,7 @@ public class PacketBuffer {
 
     void handlePacketsBuffer(){
 
+
         while(true){
             try {
                 if(!this.queue.isEmpty()){
@@ -39,23 +42,26 @@ public class PacketBuffer {
                     L4Packet l4 = PacketFactory.parseL4Packet(l3);
 
                     if (filter.check(l3) && filter.check(l4)) {
-                    System.out.println("Frame " + count.get() + ": "
+
+                    if(filter.isVerbose())System.out.println("Frame " + count.get() + ": "
                             + Ethernet.rawHex.length()/2 + " bytes captured (" + Ethernet.rawHex.length() * 4 + " bits) on interface "
                             + Ethernet.nif);
+                    else System.out.print("Frame " + count.get() + " ");
 
-                    Ethernet.printAll();
+                    Ethernet.printAll(filter.isVerbose());
 
-                    if(l3 != null) l3.printAll();
+                    if(l3 != null) l3.printAll(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP()), filter.isVerbose());
 
-                    if(l4 != null) l4.printAll();
-                    System.out.println("-------------------");
+                    if(l4 != null) l4.printAll(filter.isVerbose());
+
+                    if(filter.isVerbose()) System.out.println("-------------------");
 
                     if(output != null && !output.closed){
                         if(output.rawHex){
                             output.writeToFile(Ethernet.getRawHex());
                         }
                         else{
-                            String outputLine = getTime() + " " + Ethernet.getString() + "\n                " + l3.getString() + "\n                " + l4.getString();
+                            String outputLine = getTime() + " " + Ethernet.getString() + "\n                " + l3.getString(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP())) + "\n                " + l4.getString();
 
                             output.writeToFile(outputLine);
                         }

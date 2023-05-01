@@ -7,17 +7,19 @@ public class Filter {
     private String protocol;
     private int SourcePort;
     private int DestPort;
+    private boolean verbose;
 
-    public Filter(String srcIP, String destIP, String srcPort, String destPort, String protocol) {
-        createFilter(srcIP, destIP, Integer.parseInt(srcPort), Integer.parseInt(destPort), protocol);
+    public Filter(String srcIP, String destIP, String srcPort, String destPort, String protocol, String verbose) {
+        createFilter(srcIP, destIP, Integer.parseInt(srcPort), Integer.parseInt(destPort), protocol, verbose);
     }
 
-    public void createFilter(String srcIP, String destIP, int srcPort, int destPort, String protocol) {
+    public void createFilter(String srcIP, String destIP, int srcPort, int destPort, String protocol, String verbose) {
         this.SourceSubnet = new Subnet(srcIP);
         this.SourcePort = srcPort;
         this.DestPort = destPort;
         this.DestSubnet = new Subnet(destIP);
         this.protocol = protocol;
+        this.verbose = verbose.equals("2");
     }
     public boolean check(L3Packet l3packet) {
         if (!l3packet.getProtocol().equals(this.protocol) && !this.protocol.equals("")) {
@@ -40,5 +42,9 @@ public class Filter {
             return false;
         }
         return true;
+    }
+
+    public boolean isVerbose(){
+        return this.verbose;
     }
 }

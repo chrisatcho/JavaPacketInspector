@@ -26,11 +26,17 @@ public class UDPPacket extends L4Packet {
     }
 
     @Override
-    public void printAll() {
-        System.out.println("UDP " + this.sourcePort + " > " + this.destPort + " Length: " + this.length);
+    public void printAll(boolean verbose) {
+        if(verbose) System.out.println(this.getString());
+        else System.out.println(this.getShortString());
     }
     public int getSourcePort(){return this.sourcePort;}
     public int getDestPort(){return this.destPort;}
 
-    public String getString(){return "UDP " + this.sourcePort + " > " + this.destPort + " Length: " + (this.length * 8);}
+    public String getString(){return " UDP " + this.sourcePort + " > " + this.destPort + " Length: " + (this.length * 8);}
+
+    @Override
+    public String getShortString(){
+        return " UDP " + this.sourcePort + " > " + this.destPort + " Length: " + (this.length * 8);
+    }
 }

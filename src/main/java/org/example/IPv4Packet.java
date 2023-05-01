@@ -35,10 +35,33 @@ public class IPv4Packet extends L3Packet {
                 Integer.parseInt(s.substring(4, 6), 16) + "." +
                 Integer.parseInt(s.substring(6, 8), 16);
     }
-    public void printAll() {
-        System.out.println("Internet Protocol Version 4, Src: " + this.srcIP + ", Dst: " + this.destIP + ", Protocol: " + this.protocol);
+    public void printAll(String srcIPHostname, String destIPHostname, boolean verbose) {
+        if(verbose) System.out.println(this.getString(srcIPHostname, destIPHostname));
+        else System.out.print(getShortString(srcIPHostname, destIPHostname));
     }
-    public String getString(){return "Internet Protocol Version 4, Src: " + this.srcIP + ", Dst: " + this.destIP + ", Protocol: " + this.protocol;}
+
+    public String getString(String srcIPHostname, String destIPHostname){
+        String sendHostip;
+        sendHostip = (this.srcIP.equals((srcIPHostname)) ? "" : "("+srcIPHostname+")");
+
+        String destHostip;
+        destHostip = (this.destIP.equals((destIPHostname)) ? "" : "("+ destIPHostname + ")");
+
+        return "Internet Protocol Version 4, Src: " + this.srcIP + sendHostip + "-->" + this.destIP + destHostip + ", Protocol: " + this.protocol;
+    }
+
+    @Override
+    public String getShortString(String srcIPHostname, String destIPHostname) {
+        String sendHostip;
+        sendHostip = (this.srcIP.equals((srcIPHostname)) ? "" : "("+srcIPHostname+")");
+
+        String destHostip;
+        destHostip = (this.destIP.equals((destIPHostname)) ? "" : "("+ destIPHostname + ")");
+
+        return " IPv4 " + this.srcIP + sendHostip + "-->" + this.destIP + destHostip + " ";
+
+    }
+
     public void printSrcIP() {
         System.out.println(this.srcIP);
     }

@@ -23,7 +23,8 @@ public class ARPTable {
             return this.arpTable.get(IP);
         } else {
             String hostName = getID(IP);
-            this.arpTable.put(IP, hostName);
+            if(!hostName.equals(IP))this.arpTable.put(IP, hostName);
+
             return hostName;
         }
     }

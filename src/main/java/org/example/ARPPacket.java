@@ -5,7 +5,6 @@ public class ARPPacket extends L3Packet{
 
     public ARPPacket(String s) {
         parseVariables(s);
-        System.out.println("_M_M_M__M_M_M_M_M_M_M_M_M_M_M_M_M_M_M_M_M__M_M_M_M_M_M_M_M_M_ ARP");
     }
 
     public void parseVariables(String s) {

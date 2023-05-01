@@ -12,7 +12,7 @@ public class TCPPacket extends L4Packet {
     long windowSize;
     String checksum;
     long urgPointer;
-
+    int flags;
     String payload;
     public TCPPacket(String payload, String protocol){
         this.protocol = protocol;
@@ -24,15 +24,15 @@ public class TCPPacket extends L4Packet {
 
         this.dataOffset = HexHelper.hexToLong(payload.substring(24,25));
 
-        int flags = HexHelper.hexToInt(payload.substring(26,28));
-        this.CWR = (flags & 0x80) != 0;
-        this.ECE = (flags & 0x40) != 0;
-        this.URG = (flags & 0x20) != 0;
-        this.ACK = (flags & 0x10) != 0;
-        this.PSH = (flags & 0x08) != 0;
-        this.RST = (flags & 0x04) != 0;
-        this.SYN = (flags & 0x02) != 0;
-        this.FIN = (flags & 0x01) != 0;
+        this.flags = HexHelper.hexToInt(payload.substring(26,28));
+        this.CWR = (this.flags & 0x80) != 0;
+        this.ECE = (this.flags & 0x40) != 0;
+        this.URG = (this.flags & 0x20) != 0;
+        this.ACK = (this.flags & 0x10) != 0;
+        this.PSH = (this.flags & 0x08) != 0;
+        this.RST = (this.flags & 0x04) != 0;
+        this.SYN = (this.flags & 0x02) != 0;
+        this.FIN = (this.flags & 0x01) != 0;
 
         this.windowSize = HexHelper.hexToLong(payload.substring(28,32));
 
@@ -44,9 +44,9 @@ public class TCPPacket extends L4Packet {
         }
     }
     @Override
-    public void printAll() {
-        String print = this.protocol + " " + this.sourcePort + " > " + this.destPort;
-        System.out.println(print);
+    public void printAll(boolean verbose) {
+        if(verbose)System.out.println(this.getString());
+        else System.out.println(this.getShortString());
     }
 
     @Override
@@ -57,5 +57,37 @@ public class TCPPacket extends L4Packet {
     public int getSourcePort(){return this.sourcePort;}
     public int getDestPort(){return this.destPort;}
 
-    public String getString(){return this.protocol + " " + this.sourcePort + " > " + this.destPort + " Length: " +this.windowSize;}
+    public String getString(){return this.protocol + " " + this.sourcePort + " > " + this.destPort + " "+  getFlagsString() + getInfo();}
+
+    public String getFlagsString(){
+        String[] flagsString = {"CWR", "ECE", "URG", "ACK", "PSH", "RST", "SYN", "FIN"};
+        StringBuilder flagReturn = new StringBuilder();
+        boolean multiple = false;
+        for (int i = 0; i < Integer.SIZE; i++) {
+            if ((this.flags & (1 << i)) != 0) {
+                if(multiple){
+                    flagReturn.append(", " + flagsString[i]);
+                } else {
+                    flagReturn.append(flagsString[i]);
+                    multiple = true;
+                }
+            }
+        }
+
+        if(multiple) return "[" + flagReturn.toString() + "]";
+        else return "";
+    }
+
+    //TODO
+    public String getInfo(){
+        StringBuilder info = new StringBuilder();
+        info.append(" Seq=" + this.seqNum);
+        if(this.ACK)info.append(" Ack=" + this.ackNum);
+        info.append(" WindowSize= " + this.windowSize);
+        return info.toString();
+    }
+
+    public String getShortString(){
+        return "TCP " + this.sourcePort + ">" + this.destPort + " " + this.getInfo();
+    }
 }

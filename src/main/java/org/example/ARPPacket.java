@@ -20,16 +20,37 @@ public class ARPPacket extends L3Packet{
         this.payload        = s.substring(152);
     }
 
-    public void printAll(){
-        System.out.println("Address Resolution Protocol, Src: " + this.senderIP + ", Dst: " + this.targetIP);
-        if (this.targetIP.equals(this.senderIP)) {
-            System.out.println("ARP Announcement for " + this.targetIP);
-        } else {
-            System.out.println("Who has " + this.targetIP + "? Tell " + this.senderIP);
-        }
+
+    public void printAll(String srcIPHostname, String destIPHostname, boolean verbose){
+        if(verbose) System.out.println(getString(srcIPHostname,destIPHostname));
+        else System.out.print(getShortString(srcIPHostname, destIPHostname));
     }
-    public String getString(){
-        String output = "Address Resolution Protocol, Src: " + this.senderIP + ", Dst: " + this.targetIP;
+
+    @Override
+    public String getShortString(String srcIPHostname, String destIPHostname) {
+        String sendHostip;
+        sendHostip = (this.senderIP.equals((srcIPHostname)) ? "" : "("+srcIPHostname+")");
+
+        String destHostip;
+        destHostip = (this.targetIP.equals((destIPHostname)) ? "" : "("+ destIPHostname + ")");
+
+        String output = "";
+        if (this.targetIP.equals(this.senderIP)) {
+            output += " ARP Announcement for " + this.targetIP + destIPHostname + " ";
+        } else {
+            output += " ARP Who has " + this.targetIP + destIPHostname+ "? Tell " + this.senderIP + srcIPHostname;
+        }
+        return output;
+    }
+
+    public String getString(String srcIPHostname, String destIPHostname){
+        String sendHostip;
+        sendHostip = (this.senderIP.equals((srcIPHostname)) ? "" : "("+srcIPHostname+")");
+
+        String destHostip;
+        destHostip = (this.targetIP.equals((destIPHostname)) ? "" : "("+ destIPHostname + ")");
+
+        String output = "Address Resolution Protocol, Src: " + this.senderIP + sendHostip + ", Dst: " + this.targetIP + destHostip+ "\n";
         if (this.targetIP.equals(this.senderIP)) {
             output += "ARP Announcement for " + this.targetIP;
         } else {

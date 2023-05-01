@@ -7,11 +7,7 @@ import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.util.NifSelector;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,7 +17,7 @@ public class Main {
 
         // Get filter information
         String[] filterList = getFilterParams();
-        Filter filter = new Filter(filterList[0], filterList[1], filterList[2], filterList[3], filterList[4]);
+        Filter filter = new Filter(filterList[0], filterList[1], filterList[2], filterList[3], filterList[4], filterList[5]);
 
         //Params for incoming packets
         int snapshotLength = 65536;
@@ -57,9 +53,7 @@ public class Main {
                 System.exit(0);
             });
 
-            Thread packetBuffer = new Thread(() -> {
-                buffer.handlePacketsBuffer();
-            });
+            Thread packetBuffer = new Thread(buffer::handlePacketsBuffer);
 
             packetBuffer.start();
             handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
@@ -88,6 +82,7 @@ public class Main {
         }
         return device;
     }
+
     /*
     Returns a list of parameters for the filter
     Index: 0 - Source IP
@@ -96,10 +91,11 @@ public class Main {
     Index: 3 - Destination Port
     Index: 4 - Protocol
      */
+
     static String[] getFilterParams() {
         String input;
         Scanner scanner = new Scanner(System.in);
-        String[] params = {"0.0.0.0/32", "0.0.0.0/32", "-1", "-1", ""};
+        String[] params = {"0.0.0.0/32", "0.0.0.0/32", "-1", "-1", "", "2"};
 
         System.out.println("Enter the following parameters for the filter: (Press enter to skip a parameter)");
         System.out.println("Source IP (CIDR block): ");
@@ -121,6 +117,10 @@ public class Main {
         System.out.println("Protocol: ");
         input = scanner.nextLine();
         if (!input.equals("")) params[4] = input;
+
+        System.out.println("Short[1] or Verbose[2]");
+        input = scanner.nextLine();
+        if (!input.equals("")) params[5] = input;
 
         return params;
     }

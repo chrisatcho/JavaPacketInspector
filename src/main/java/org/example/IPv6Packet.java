@@ -66,7 +66,7 @@ public class IPv6Packet extends L3Packet {
             case "06" -> "TCP";
             case "11" -> "UDP";
 
-            default -> null;
+            default -> "";
         };
     }
 

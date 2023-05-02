@@ -48,4 +48,6 @@ public class ARPTable {
         String[] nums = ip.split("\\.");
         return new byte[]{(byte) Integer.parseInt(nums[0]), (byte) Integer.parseInt(nums[1]),(byte) Integer.parseInt(nums[2]),(byte) Integer.parseInt(nums[3])};
     }
+
+
 }

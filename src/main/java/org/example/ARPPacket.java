@@ -8,16 +8,16 @@ public class ARPPacket extends L3Packet{
     }
 
     public void parseVariables(String s) {
-        this.hardwareType   = s.substring(0, 16);
-        this.protocolType   = s.substring(16, 32);
-        this.hardwareSize   = s.substring(32, 40);
-        this.protocolSize   = s.substring(40, 48);
-        this.opcode         = s.substring(48, 56);
-        this.senderMac      = s.substring(56, 72);
-        this.senderIP       = s.substring(72, 104);
-        this.targetMac      = s.substring(104, 120);
-        this.targetIP       = s.substring(120, 152);
-        this.payload        = s.substring(152);
+        this.hardwareType   = s.substring(0, 4);
+        this.protocolType   = s.substring(4, 8);
+        this.hardwareSize   = s.substring(8, 10);
+        this.protocolSize   = s.substring(10, 12);
+        this.opcode         = s.substring(12, 16);
+        this.senderMac      = s.substring(16, 28);
+        this.senderIP       = this.getIPfrom8Hex(s.substring(28, 36));
+        this.targetMac      = s.substring(36, 48);
+        this.targetIP       = this.getIPfrom8Hex(s.substring(48,56));
+        this.payload        = s.substring(56);
     }
 
 
@@ -52,9 +52,9 @@ public class ARPPacket extends L3Packet{
 
         String output = "Address Resolution Protocol, Src: " + this.senderIP + sendHostip + ", Dst: " + this.targetIP + destHostip+ "\n";
         if (this.targetIP.equals(this.senderIP)) {
-            output += "ARP Announcement for " + this.targetIP;
+            output += "ARP Announcement for " + this.targetIP + destHostip;
         } else {
-            output += "Who has " + this.targetIP + "? Tell " + this.senderIP;
+            output += "Who has " + this.targetIP + destHostip+ "? Tell " + this.senderIP + sendHostip;
         }
         return output;
     }
@@ -74,4 +74,13 @@ public class ARPPacket extends L3Packet{
     public String getDestIP() { return this.targetIP; }
     public String getProtocol() { return this.opcode; }
     public String getPayload() { return this.payload; }
+
+    public String getIPfrom8Hex(String s){
+        StringBuilder output = new StringBuilder();
+        for(int i = 0; i < 4; ++i){
+            output.append(Integer.parseInt(s.substring(i*2, i*2+2), 16));
+            if(i < 3)output.append(".");
+        }
+        return output.toString();
+    }
 }

@@ -56,7 +56,7 @@ public class Main {
             Thread packetBuffer = new Thread(buffer::handlePacketsBuffer);
 
             packetBuffer.start();
-            handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
+            //handle.setFilter("ip6", BpfProgram.BpfCompileMode.OPTIMIZE);
 
             PacketListener listener = packet -> {
                 byte[] data = packet.getRawData();

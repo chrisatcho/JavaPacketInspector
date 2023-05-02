@@ -22,6 +22,10 @@ public class Filter {
         this.verbose = verbose.equals("2");
     }
     public boolean check(L3Packet l3packet) {
+        if(l3packet == null || l3packet instanceof IPv6Packet)return true;
+
+
+
         if (!l3packet.getProtocol().equals(this.protocol) && !this.protocol.equals("")) {
             return false;
         }

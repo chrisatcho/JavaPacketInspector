@@ -25,6 +25,7 @@ public class PacketFactory {
     }
 
     public static L4Packet parseL4Packet(L3Packet l3Packet){
+        if(l3Packet.getProtocol() == null)return null;
         switch (l3Packet.getProtocol()){
             case "TCP" ->{
                 return new TCPPacket(l3Packet.getPayload(), "TCP");

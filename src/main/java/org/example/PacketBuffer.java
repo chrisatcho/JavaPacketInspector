@@ -43,32 +43,32 @@ public class PacketBuffer {
 
                     if (filter.check(l3) && filter.check(l4)) {
 
-                    if(filter.isVerbose())System.out.println("Frame " + count.get() + ": "
-                            + Ethernet.rawHex.length()/2 + " bytes captured (" + Ethernet.rawHex.length() * 4 + " bits) on interface "
-                            + Ethernet.nif);
-                    else System.out.print("Frame " + count.get() + " ");
+                        if(filter.isVerbose())System.out.println("Frame " + count.get() + ": "
+                                + Ethernet.rawHex.length()/2 + " bytes captured (" + Ethernet.rawHex.length() * 4 + " bits) on interface "
+                                + Ethernet.nif);
+                        else System.out.print("Frame " + count.get() + " ");
 
-                    Ethernet.printAll(filter.isVerbose());
+                        Ethernet.printAll(filter.isVerbose());
 
-                    if(l3 != null) l3.printAll(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP()), filter.isVerbose());
+                        if(l3 != null) l3.printAll(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP()), filter.isVerbose());
 
-                    if(l4 != null) l4.printAll(filter.isVerbose());
+                        if(l4 != null) l4.printAll(filter.isVerbose());
 
-                    if(filter.isVerbose()) System.out.println("-------------------");
+                        if(filter.isVerbose()) System.out.println("-------------------");
 
-                    if(output != null && !output.closed){
-                        if(output.rawHex){
-                            output.writeToFile(Ethernet.getRawHex());
-                        }
-                        else{
-                            String outputLine = getTime() + " " + Ethernet.getString() + "\n                " + l3.getString(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP())) + "\n                " + l4.getString();
-
-                            output.writeToFile(outputLine);
+                        if(output != null && !output.closed){
+                            if(output.rawHex){
+                                output.writeToFile(Ethernet.getRawHex());
+                            }
+                            else{
+                                String outputLine = getTime() + " " + Ethernet.getString() + "\n                " + l3.getString(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP())) + "\n                " + l4.getString();
+                                output.writeToFile(outputLine);
+                            }
                         }
                     }
                 }
-                }
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e) {
                 e.printStackTrace();
             }
 

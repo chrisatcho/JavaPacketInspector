@@ -1,6 +1,5 @@
 package org.example;
 
-import org.example.L4Packets.*;
 public class Filter {
     private Subnet SourceSubnet;
     private Subnet DestSubnet;

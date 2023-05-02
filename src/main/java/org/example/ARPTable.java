@@ -1,5 +1,5 @@
 package org.example;
-import java.net.NetworkInterface;
+
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.net.InetAddress;
@@ -20,21 +20,28 @@ public class ARPTable {
 
     public String getDevID(String IP){
         //IPv6 packets cannot be searched for hostname so just returns the input
-        if(IP.length() > 15) return IP;
+        if(IP.length() > 15) {
+            return IP;
+        }
 
         if(contains(IP)){
             return this.arpTable.get(IP);
         } else {
             String hostName = getID(IP);
             if(!hostName.equals(IP))this.arpTable.put(IP, hostName);
-
             return hostName;
         }
     }
 
     public static String getID(String IP){
         try{
-            InetAddress ipAddress = InetAddress.getByAddress(getIP(IP));
+            InetAddress ipAddress;
+            if(IP.contains(":")){
+                ipAddress = InetAddress.getByName(IP);
+            }
+            else{
+                ipAddress = InetAddress.getByAddress(getIP(IP));
+            }
             String hostname = ipAddress.getCanonicalHostName();
             return hostname;
         }
@@ -48,6 +55,4 @@ public class ARPTable {
         String[] nums = ip.split("\\.");
         return new byte[]{(byte) Integer.parseInt(nums[0]), (byte) Integer.parseInt(nums[1]),(byte) Integer.parseInt(nums[2]),(byte) Integer.parseInt(nums[3])};
     }
-
-
 }

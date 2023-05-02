@@ -1,6 +1,5 @@
 package org.example;
 
-import org.example.Utils.HexHelper;
 public class IPv6Packet extends L3Packet {
     String version, trafficClass, flowLabel, payloadLength, nextHeader, hopLimit, srcIP, destIP, payload;
 

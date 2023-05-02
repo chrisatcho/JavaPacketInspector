@@ -19,6 +19,9 @@ public class ARPTable {
     }
 
     public String getDevID(String IP){
+        //IPv6 packets cannot be searched for hostname so just returns the input
+        if(IP.length() > 15) return IP;
+
         if(contains(IP)){
             return this.arpTable.get(IP);
         } else {
@@ -45,4 +48,6 @@ public class ARPTable {
         String[] nums = ip.split("\\.");
         return new byte[]{(byte) Integer.parseInt(nums[0]), (byte) Integer.parseInt(nums[1]),(byte) Integer.parseInt(nums[2]),(byte) Integer.parseInt(nums[3])};
     }
+
+
 }

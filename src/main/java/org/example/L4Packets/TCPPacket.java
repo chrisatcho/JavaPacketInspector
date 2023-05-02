@@ -78,7 +78,7 @@ public class TCPPacket extends L4Packet {
         else return "";
     }
 
-    //TODO
+    //TODO maybe add more idk?
     public String getInfo(){
         StringBuilder info = new StringBuilder();
         info.append(" Seq=" + this.seqNum);

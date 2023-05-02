@@ -46,7 +46,7 @@ public class TCPPacket extends L4Packet {
     @Override
     public void printAll(boolean verbose) {
         if(verbose)System.out.println(this.getString());
-        else System.out.println(this.getShortString());
+        else System.out.print(this.getShortString());
     }
 
     @Override
@@ -88,6 +88,6 @@ public class TCPPacket extends L4Packet {
     }
 
     public String getShortString(){
-        return "TCP " + this.sourcePort + ">" + this.destPort + " " + this.getInfo();
+        return " " + this.sourcePort + " > " + this.destPort + " " + this.getInfo();
     }
 }

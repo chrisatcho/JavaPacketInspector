@@ -15,9 +15,7 @@ public class PacketFactory {
             case "ARP" -> {
                 return new ARPPacket(l2Packet.payload);
             }
-            case "LLDP" -> {
-                return new LLDPacket(l2Packet.payload);
-            }
+            //case "LLDP" -> {return new LLDPacket(l2Packet.payload);}
             default -> {
                 return null;
             }
@@ -25,7 +23,10 @@ public class PacketFactory {
     }
 
     public static L4Packet parseL4Packet(L3Packet l3Packet){
+        if(l3Packet == null)return null;
+
         if(l3Packet.getProtocol() == null)return null;
+
         switch (l3Packet.getProtocol()){
             case "TCP" ->{
                 return new TCPPacket(l3Packet.getPayload(), "TCP");

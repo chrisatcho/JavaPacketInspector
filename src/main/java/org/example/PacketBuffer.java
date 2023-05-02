@@ -55,14 +55,26 @@ public class PacketBuffer {
                         if(l4 != null) l4.printAll(filter.isVerbose());
 
                         if(filter.isVerbose()) System.out.println("-------------------");
+                        else System.out.print("\n");
 
                         if(output != null && !output.closed){
                             if(output.rawHex){
                                 output.writeToFile(Ethernet.getRawHex());
                             }
                             else{
-                                String outputLine = getTime() + " " + Ethernet.getString() + "\n                " + l3.getString(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP())) + "\n                " + l4.getString();
-                                output.writeToFile(outputLine);
+                                StringBuilder outputLine = new StringBuilder();
+
+                                if(filter.isVerbose()){
+                                   outputLine.append(getTime() + " " + Ethernet.getString() + "\n");
+                                   if(l3 != null) outputLine.append("                " + l3.getString(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP())) + "\n");
+                                   if(l4 != null) outputLine.append("                " + l4.getString());
+                                }
+                                else{
+                                    outputLine.append(getTime() + " " + Ethernet.getString());
+                                    if(l3 != null) outputLine.append(l3.getShortString(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP())));
+                                    if(l4 != null) outputLine.append(l4.getShortString());
+                                }
+                                output.writeToFile(outputLine.toString());
                             }
                         }
                     }

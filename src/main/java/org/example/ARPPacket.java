@@ -36,9 +36,9 @@ public class ARPPacket extends L3Packet{
 
         String output = "";
         if (this.targetIP.equals(this.senderIP)) {
-            output += " ARP Announcement for " + this.targetIP + destIPHostname + " ";
+            output += " ARP Announcement for " + this.targetIP + destHostip + " ";
         } else {
-            output += " ARP Who has " + this.targetIP + destIPHostname+ "? Tell " + this.senderIP + srcIPHostname;
+            output += " ARP Who has " + this.targetIP + destHostip+ "? Tell " + this.senderIP + sendHostip;
         }
         return output;
     }

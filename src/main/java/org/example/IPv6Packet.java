@@ -64,6 +64,7 @@ public class IPv6Packet extends L3Packet {
         return switch(protocolNum){
             case "06" -> "TCP";
             case "11" -> "UDP";
+            case "3a" -> "ICMPv6";
 
             default -> "";
         };

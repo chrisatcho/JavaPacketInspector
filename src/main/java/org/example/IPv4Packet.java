@@ -27,6 +27,7 @@ public class IPv4Packet extends L3Packet {
             this.options     = "";
             this.payload     = s.substring(40);
         }
+
     }
 
     private static String hexToIP(String s) {

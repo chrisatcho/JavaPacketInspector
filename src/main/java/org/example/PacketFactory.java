@@ -34,6 +34,12 @@ public class PacketFactory {
             case "UDP" -> {
                 return new UDPPacket(l3Packet.getPayload(), "UDP");
             }
+            case "ICMPv6" -> {
+                return new ICMPv6(l3Packet.getPayload(), "ICMPv6");
+            }
+            case "ICMPv4" -> {
+                return new ICMPv4(l3Packet.getPayload(), "ICMPv4");
+            }
             default ->{
                 return null;
             }

@@ -8,6 +8,7 @@ public class ARPTable {
     HashMap<String, String> arpTable;
     public ARPTable(){
         this.arpTable = new HashMap<String, String>();
+        this.addThisDeviceName();
     }
 
     public void add(String IP, String id){
@@ -55,4 +56,16 @@ public class ARPTable {
         String[] nums = ip.split("\\.");
         return new byte[]{(byte) Integer.parseInt(nums[0]), (byte) Integer.parseInt(nums[1]),(byte) Integer.parseInt(nums[2]),(byte) Integer.parseInt(nums[3])};
     }
+
+    public void addThisDeviceName(){
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            String deviceName = localhost.getHostName();
+            this.arpTable.put(localhost.getHostName(), deviceName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

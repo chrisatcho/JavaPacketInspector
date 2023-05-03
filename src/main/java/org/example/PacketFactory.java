@@ -40,6 +40,9 @@ public class PacketFactory {
             case "ICMPv4" -> {
                 return new ICMPv4(l3Packet.getPayload(), "ICMPv4");
             }
+            case "IGMP" -> {
+                return new IGMP(l3Packet.getPayload(), "IGMP");
+            }
             default ->{
                 return null;
             }

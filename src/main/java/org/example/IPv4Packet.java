@@ -27,6 +27,7 @@ public class IPv4Packet extends L3Packet {
             this.options     = "";
             this.payload     = s.substring(40);
         }
+
     }
 
     private static String hexToIP(String s) {
@@ -58,7 +59,7 @@ public class IPv4Packet extends L3Packet {
         String destHostip;
         destHostip = (this.destIP.equals((destIPHostname)) ? "" : "("+ destIPHostname + ")");
 
-        return " IPv4 " + this.srcIP + sendHostip + "-->" + this.destIP + destHostip + " ";
+        return " IPv4 " + this.srcIP + sendHostip + "-->" + this.destIP + destHostip + " " + this.protocol;
 
     }
 

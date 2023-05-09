@@ -30,7 +30,7 @@ abstract class L3Packet extends Packet {
     //This map could potentially be moved elsewhere for better memory management.
     Map<Integer, String> protocolMap = Map.<Integer, String>ofEntries(
             entry(0, "HOPOPT"),  // IPv6 Hop-by-Hop Option
-            entry(1, "ICMP"),  // Internet Control Message 
+            entry(1, "ICMPv4"),  // Internet Control Message
             entry(2, "IGMP"),  // Internet Group Management
             entry(3, "GGP"),  // Gateway-to-Gateway
             entry(4, "IPv4"),  // IPv4 encapsulation
@@ -87,7 +87,7 @@ abstract class L3Packet extends Packet {
             entry(55, "MOBILE"),  // IP Mobility
             entry(56, "TLSP"),  // Transport Layer Security Protocol using Kryptonet key management
             entry(57, "SKIP"),  // SKIP
-            entry(58, "IPv6-ICMP"),  // ICMP for IPv6
+            entry(58, "ICMPv6"),  // ICMP for IPv6
             entry(59, "IPv6-NoNxt"),  // No Next Header for IPv6
             entry(60, "IPv6-Opts"),  // Destination Options for IPv6
             entry(61, "anyInternal"), // any host internal protocol

@@ -15,9 +15,7 @@ public class PacketFactory {
             case "ARP" -> {
                 return new ARPPacket(l2Packet.payload);
             }
-            case "LLDP" -> {
-                return new LLDPacket(l2Packet.payload);
-            }
+            //case "LLDP" -> {return new LLDPacket(l2Packet.payload);}
             default -> {
                 return null;
             }
@@ -25,12 +23,25 @@ public class PacketFactory {
     }
 
     public static L4Packet parseL4Packet(L3Packet l3Packet){
+        if(l3Packet == null)return null;
+
+        if(l3Packet.getProtocol() == null)return null;
+
         switch (l3Packet.getProtocol()){
             case "TCP" ->{
                 return new TCPPacket(l3Packet.getPayload(), "TCP");
             }
             case "UDP" -> {
                 return new UDPPacket(l3Packet.getPayload(), "UDP");
+            }
+            case "ICMPv6" -> {
+                return new ICMPv6(l3Packet.getPayload(), "ICMPv6");
+            }
+            case "ICMPv4" -> {
+                return new ICMPv4(l3Packet.getPayload(), "ICMPv4");
+            }
+            case "IGMP" -> {
+                return new IGMP(l3Packet.getPayload(), "IGMP");
             }
             default ->{
                 return null;

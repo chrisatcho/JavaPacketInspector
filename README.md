@@ -2,6 +2,8 @@
 
 A simple packet inspector written in Java utilising the [Pcap4J](https://kaitoy.github.io/pcap4j/javadoc/latest/en/) library. It helps understand the traffic on your network, and provide a simpler way of digesting information.
 
+The repository for this project can be found at: https://github.com/ChrisAtchison/JavaPacketInspector
+
 ## Features
 
 - Packet Sniffing

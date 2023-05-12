@@ -21,25 +21,25 @@ public class ICMPv4 extends L4Packet {
 
     @Override
     public void printPayload() {
-        System.out.println(this.body);
+        System.out.print(this.body);
     }
 
     @Override
     public void printAll(boolean verbose) {
-        System.out.println(this.getString());
+        System.out.print(this.getString());
     }
 
     @Override
     public String getString() {
         String successful;
-        successful = (this.type == 3 || this.type == 11 || this.type == 12 || this.type == 31) ? "Error" : "Success";
+        successful = (this.type == 3 || this.type == 11 || this.type == 12 || this.type == 31) ? " Error" : " Success";
         return successful + " " + protocolMap.get(this.type);
     }
 
     @Override
     public String getShortString() {
         String successful;
-        successful = (this.type == 3 || this.type == 11 || this.type == 12 || this.type == 31) ? "Error" : "Success";
+        successful = (this.type == 3 || this.type == 11 || this.type == 12 || this.type == 31) ? " Error" : " Success";
         return successful + " " + protocolMap.get(this.type);
     }
 

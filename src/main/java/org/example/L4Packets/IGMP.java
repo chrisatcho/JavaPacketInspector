@@ -25,7 +25,7 @@ public class IGMP extends L4Packet {
     }
     @Override
     public void printPayload() {
-        System.out.println(this.payload);
+        System.out.print(this.payload);
     }
     @Override
     public void printAll(boolean verbose) {

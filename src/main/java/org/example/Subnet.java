@@ -5,14 +5,15 @@ public class Subnet {
     private int address = 0;
     private int network = 0;
     private int broadcast = 0;
-
+    private String stringVal;
     public Subnet(String cidrNotation) {
         if (cidrNotation.equals("0.0.0.0/32")) {
+            this.stringVal = "0.0.0.0/32";
             return;
         }
         calculate(cidrNotation);
     }
-
+    public String getStringVal(){return this.stringVal;}
     public boolean IPinRange(String ip) {
         int ipAddr = 0;
         String[] addressBytes = ip.split("\\.");

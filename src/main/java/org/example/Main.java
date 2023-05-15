@@ -32,6 +32,7 @@ public class Main {
         // A handle is an abstraction of a pointer, referring to the interface.
         try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS , readTimeout)) {
 
+
             Thread userInputThread = new Thread(() -> {
                 System.out.println("Press Enter to stop packet capture...");
                 try {

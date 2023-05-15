@@ -8,10 +8,10 @@ public class LLDPacket extends L3Packet {
     }
 
     public void parseVariables(String s) {
-        this.chassisID  = s.substring(0, 16);
-        this.portID     = s.substring(16, 32);
-        this.ttl        = s.substring(32, 48);
-        this.payload    = s.substring(48);
+        this.chassisID  = s.substring(0, 8);
+        this.portID     = s.substring(8, 16);
+        this.ttl        = s.substring(16, 24);
+        this.payload    = s.substring(24);
     }
 
     public void printAll(String srcIPHostname, String destIPHostname, boolean verbose) {

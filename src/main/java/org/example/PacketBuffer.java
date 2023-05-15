@@ -41,7 +41,7 @@ public class PacketBuffer {
                     L3Packet l3 = PacketFactory.parseL3Packet(Ethernet);
                     L4Packet l4 = PacketFactory.parseL4Packet(l3);
 
-                    if (filter.check(l3) && filter.check(l4)) {
+                    if (filter.check(l4, l3)) {
 
                         if(filter.isVerbose())System.out.println("Frame " + count.get() + ": "
                                 + Ethernet.rawHex.length()/2 + " bytes captured (" + Ethernet.rawHex.length() * 4 + " bits) on interface "

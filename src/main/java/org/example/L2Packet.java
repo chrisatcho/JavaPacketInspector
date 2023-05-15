@@ -176,9 +176,8 @@ public class L2Packet extends Packet {
         return s.substring(0, 2) + ":" + s.substring(2, 4) + ":" + s.substring(4, 6) + ":" + s.substring(6, 8) + ":" + s.substring(8, 10) + ":" + s.substring(10, 12);
     }
 
-    public void printAll(boolean verbose) {
-        if(verbose) System.out.println(this.getString());
-        else System.out.print(this.getString());
+    public void printAll() {
+        System.out.println(this.getString());
     }
 
     public String getString(){return "Ethernet II, Src: " + this.srcMac + ", Dst: " + this.destMac ;};

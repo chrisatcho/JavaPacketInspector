@@ -32,6 +32,7 @@ public class Main {
         // A handle is an abstraction of a pointer, referring to the interface.
         try (PcapHandle handle = nif.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS , readTimeout)) {
 
+
             Thread userInputThread = new Thread(() -> {
                 System.out.println("Press Enter to stop packet capture...");
                 try {
@@ -54,11 +55,11 @@ public class Main {
             });
 
             Thread packetBuffer = new Thread(buffer::handlePacketsBuffer);
-
             packetBuffer.start();
             //handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
 
             PacketListener listener = packet -> {
+
                 byte[] data = packet.getRawData();
                 L2Packet Ethernet = new L2Packet(data, nif.getName());
                 buffer.addPacket(Ethernet);

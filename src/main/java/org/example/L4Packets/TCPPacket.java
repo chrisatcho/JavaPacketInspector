@@ -83,7 +83,7 @@ public class TCPPacket extends L4Packet {
         StringBuilder info = new StringBuilder();
         info.append(" Seq=" + this.seqNum);
         if(this.ACK)info.append(" Ack=" + this.ackNum);
-        info.append(" WindowSize= " + this.windowSize);
+        info.append(" WindowSize=" + this.windowSize);
         return info.toString();
     }
 

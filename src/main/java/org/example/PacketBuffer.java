@@ -50,7 +50,8 @@ public class PacketBuffer {
                         Ethernet.printAll(filter.isVerbose());
 
                         if (l3 != null)
-                            l3.printAll(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP()), filter.isVerbose());
+                            l3.printAll("", "", filter.isVerbose());
+//                            l3.printAll(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP()), filter.isVerbose());
 
                         if (l4 != null) l4.printAll(filter.isVerbose());
 
@@ -64,11 +65,13 @@ public class PacketBuffer {
                                 StringBuilder outputLine = new StringBuilder();
                                 if (filter.isVerbose()) {
                                     outputLine.append(getTime() + " " + Ethernet.getString() + "\n");
-                                    if (l3 != null) outputLine.append("                " + l3.getString(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP())) + "\n");
+//                                    if (l3 != null) outputLine.append("                " + l3.getString(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP())) + "\n");
+                                    if (l3 != null) outputLine.append("                " + l3.getString("", "") + "\n");
                                     if (l4 != null) outputLine.append("                " + l4.getString());
                                 } else {
                                     outputLine.append(getTime() + " " + Ethernet.getString());
-                                    if (l3 != null) outputLine.append(l3.getShortString(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP())));
+//                                    if (l3 != null) outputLine.append(l3.getShortString(this.arp.getDevID(l3.getSrcIP()), this.arp.getDevID(l3.getDestIP())));
+                                    if (l3 != null) outputLine.append(l3.getShortString("", ""));
                                     if (l4 != null) outputLine.append(l4.getShortString());
                                 }
                                 output.writeToFile(outputLine.toString());

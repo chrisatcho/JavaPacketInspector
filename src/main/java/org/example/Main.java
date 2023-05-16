@@ -55,11 +55,11 @@ public class Main {
             });
 
             Thread packetBuffer = new Thread(buffer::handlePacketsBuffer);
-
             packetBuffer.start();
             //handle.setFilter("ip", BpfProgram.BpfCompileMode.OPTIMIZE);
 
             PacketListener listener = packet -> {
+
                 byte[] data = packet.getRawData();
                 L2Packet Ethernet = new L2Packet(data, nif.getName());
                 buffer.addPacket(Ethernet);
